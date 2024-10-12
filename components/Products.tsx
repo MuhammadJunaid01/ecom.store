@@ -57,10 +57,25 @@ const Products: React.FC<IProps> = ({ products, isFetching, hasMore }) => {
              shadow-md  bg-white `}
             >
               <Image
-                style={tw` h-[70%]  w-full`}
+                style={tw` h-[60%]  w-full`}
                 source={{ uri: product?.thumbnail }}
+                resizeMode="contain"
               />
-              <ThemedText>{product.id}</ThemedText>
+              <ThemedView style={tw` p-2`}>
+                <ThemedText
+                  fontFamily="OpenSansMedium"
+                  style={tw` text-xl text-gray-600`}
+                >
+                  {product?.title.slice(0, 11)}
+                </ThemedText>
+                <ThemedText
+                  fontFamily="OpenSansCondensedBold"
+                  style={tw` text-xl  mt-0.5 text-gray-600`}
+                >
+                  ${product?.price}
+                </ThemedText>
+                <ThemedText>{product.id}</ThemedText>
+              </ThemedView>
             </ThemedView>
           );
         })}

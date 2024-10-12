@@ -92,13 +92,6 @@ const TabsHome = () => {
     }
     return [{ name: "All" }, ...data];
   }, [data]);
-  useEffect(() => {
-    // Reset products and page when selectedCategory changes
-    setProducts([]);
-    setPage(1);
-    setHasMore(true); // Reset hasMore if needed
-    fetchProducts(true); // Fetch new data
-  }, [query.selectedCategory]);
 
   const [refreshing, setRefreshing] = useState(false);
 
@@ -121,11 +114,12 @@ const TabsHome = () => {
 
     // Ensure page is at least 1 to avoid negative or zero skips
     const skip = page > 1 ? (page - 1) * PAGE_LIMIT : 0;
-    const category = query.selectedCategory?.slug
-      ? `&category=${query.selectedCategory?.slug}`
-      : "";
-
-    const initialQuery = `limit=${PAGE_LIMIT}&skip=${skip}${category}`;
+    // const category = query.selectedCategory?.slug
+    //   ? `&tags=${query.selectedCategory?.slug}`
+    //   : "";
+    // console.log("category", category);
+    const initialQuery = `limit=${PAGE_LIMIT}&skip=${skip}`;
+    console.log("initialQuery", initialQuery);
 
     try {
       const response = await getProducts(initialQuery).unwrap();
@@ -149,21 +143,26 @@ const TabsHome = () => {
     }
   };
   const onPressSelectCategory = useCallback(
-    (category: ICategory, index: number) => {
-      // setTimeout(() => {
-      //   categoryRef.current?.scrollToIndex({
-      //     index,
-      //     animated: true,
-      //     viewPosition: 0.5, // Center the item in view
-      //   });
-      // }, 100); // Small delay to allow FlatList to render
-      // setPage(1); // Reset to the first page
-      setProducts([]); // Clear the data
-      setHasMore(true); // Reset hasMore
-      fetchProducts(true); // Fetch data and reset page
-      setQuery((prev) => ({ ...prev, selectedCategory: category }));
+    async (category: ICategory, index: number) => {
+      try {
+        setQuery((prev) => ({ ...prev, selectedCategory: category }));
+        setProducts([]);
+        const isCategoryAll = category.name !== "All";
+        const initialQuery = `${isCategoryAll ? "limit=1000" : "limit=30"}`;
+        const response = await getProducts(initialQuery).unwrap();
+        const totalProducts = response.total;
+        const fetchedProducts = response.products;
+        const filteredData = isCategoryAll
+          ? fetchedProducts.filter(
+              (product) =>
+                product.category.toLowerCase().trim() ==
+                category.slug.toLowerCase().trim()
+            )
+          : fetchedProducts;
+        setProducts((prevProducts) => [...prevProducts, ...filteredData]);
+      } catch (error) {}
     },
-    []
+    [query.selectedCategory]
   );
   const handleScroll = useCallback(
     ({ nativeEvent }: { nativeEvent: any }) => {
@@ -177,7 +176,7 @@ const TabsHome = () => {
     },
     [loading, hasMore]
   );
-  console.log(hasMore);
+
   const onRefresh = useCallback(() => {
     setPage(1); // Reset to the first page
     setProducts([]); // Clear the data
