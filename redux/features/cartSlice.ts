@@ -6,12 +6,14 @@ interface CartState {
   items: ICartItem[];
   totalQuantity: number;
   totalPrice: number;
+  wishlist: IProduct[];
 }
 
 const initialState: CartState = {
   items: [],
   totalQuantity: 0,
   totalPrice: 0,
+  wishlist: [],
 };
 
 const cartSlice = createSlice({
@@ -29,6 +31,7 @@ const cartSlice = createSlice({
         // If the item is already in the cart, just increase the quantity
         existingCartItem.quantity += 1;
       } else {
+        console.log("product not found");
         // Add the new item to the cart
         state.items.push({ ...product, quantity: 1 });
       }
@@ -68,7 +71,18 @@ const cartSlice = createSlice({
         state.totalPrice += quantityDifference * existingCartItem.price;
       }
     },
-
+    addToWishList: (state, action: PayloadAction<IProduct>) => {
+      const isProductExist = state.wishlist?.find(
+        (list) => list?.id == action?.payload?.id
+      );
+      if (!isProductExist) {
+        state.wishlist.push(action.payload);
+      } else {
+        state.wishlist = state.wishlist?.filter(
+          (list) => list.id !== action.payload.id
+        );
+      }
+    },
     // Clear the entire cart
     clearCart: (state) => {
       state.items = [];
@@ -78,7 +92,12 @@ const cartSlice = createSlice({
   },
 });
 
-export const { addToCart, removeFromCart, updateCartItemQuantity, clearCart } =
-  cartSlice.actions;
+export const {
+  addToCart,
+  removeFromCart,
+  updateCartItemQuantity,
+  clearCart,
+  addToWishList,
+} = cartSlice.actions;
 
 export default cartSlice.reducer;

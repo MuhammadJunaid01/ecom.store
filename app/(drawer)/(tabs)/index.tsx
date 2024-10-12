@@ -196,7 +196,7 @@ const TabsHome = () => {
         onScroll={handleScroll}
         scrollEventThrottle={16}
       >
-        <View style={tw` px-3 mb-2`}>
+        {/* <View style={tw` px-3 mb-2`}>
           <ThemedTextInput
             value={text}
             onPressClearInput={onPressClearInput}
@@ -206,7 +206,7 @@ const TabsHome = () => {
             ref={ref}
             onPressSlider={onPressSlider}
           />
-        </View>
+        </View> */}
         <Slider sliders={sliders} />
         <View style={tw` px-3`}>
           <Categories

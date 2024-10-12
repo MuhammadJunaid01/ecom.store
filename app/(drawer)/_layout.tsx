@@ -1,5 +1,5 @@
 import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
-import React from "react";
+import React, { useMemo } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { Drawer } from "expo-router/drawer";
 import {
@@ -9,10 +9,21 @@ import {
 } from "@react-navigation/drawer";
 import { router, useNavigation, useSegments } from "expo-router";
 import { tw } from "@/constants/theme";
-import { AntDesign, Ionicons } from "@expo/vector-icons";
+import {
+  AntDesign,
+  EvilIcons,
+  Ionicons,
+  MaterialIcons,
+} from "@expo/vector-icons";
 import { DrawerActions } from "@react-navigation/native";
+import { useAppSelector } from "@/redux/hooks";
 const _layout = () => {
   const navigation = useNavigation();
+  const { items } = useAppSelector((state) => state.cart);
+  const totalCartItems = useMemo(
+    () => items?.reduce((acc, cur) => acc + cur.quantity, 0) || 0,
+    [items]
+  );
   return (
     <Drawer
       drawerContent={(props) => <CustomDrawerContent {...props} />}
@@ -37,11 +48,22 @@ const _layout = () => {
         ),
         headerRight: () => (
           <View style={tw` pr-3 flex-row items-center gap-x-2 justify-center`}>
-            <Ionicons name="bag-outline" size={28} color="black" />
-            <View
-              style={tw` h-[18px] w-[18px]  bg-gray-900 rounded-full flex-row items-center justify-center absolute top-[13px]  right-[5px] z-50`}
-            >
-              <Text style={tw`text-[10px] text-white`}>10</Text>
+            <TouchableOpacity onPress={() => console.log("HEllo")}>
+              <EvilIcons
+                name="search"
+                size={33}
+                style={tw` text-gray-500 mb-1`}
+              />
+            </TouchableOpacity>
+            <View>
+              <Ionicons name="bag-outline" size={28} color="black" />
+              <View
+                style={tw` h-[18px] w-[18px]  bg-gray-900 rounded-full flex-row items-center justify-center absolute top-[10px]  right-[-3px] z-50`}
+              >
+                <Text style={tw`text-[10px] text-white`}>
+                  {totalCartItems || 0}
+                </Text>
+              </View>
             </View>
           </View>
         ),
