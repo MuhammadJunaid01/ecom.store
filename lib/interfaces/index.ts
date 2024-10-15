@@ -85,6 +85,7 @@ export interface IUser {
   updatedAt: Date;
 }
 export interface IEcomAddress {
+  _id?: string;
   addressType: AddressType | string;
   street: string;
   city: string;
@@ -93,8 +94,6 @@ export interface IEcomAddress {
   postalCode?: string;
   coordinates?: [number, number];
   isDefault?: boolean;
-  createdAt: Date;
-  updatedAt: Date;
 }
 export enum AddressType {
   HOME = "home",

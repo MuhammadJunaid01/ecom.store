@@ -1,6 +1,12 @@
 import { View, TouchableOpacity, Image, ImageBackground } from "react-native";
 import React, { memo, useEffect, useRef, useState } from "react";
-import { scale, screen, tw, verticalScale } from "@/constants/theme";
+import {
+  moderateScale,
+  scale,
+  screen,
+  tw,
+  verticalScale,
+} from "@/constants/theme";
 import ThemedView from "./ThemedView";
 import PagerView from "react-native-pager-view";
 import ThemedText from "./ThemedText";
@@ -62,7 +68,7 @@ const Slider: React.FC<ISliderProps> = ({ sliders }) => {
   //   }
   // };
   return (
-    <View style={tw`mt-0 h-[${verticalScale(160)}px]    bg-gray-900  px-4`}>
+    <View style={tw`mt-0 h-[${moderateScale(168)}px]    bg-gray-900  px-4`}>
       <PagerView
         ref={pagerRef}
         onPageSelected={onPageSelected}

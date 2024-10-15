@@ -13,6 +13,7 @@ import { ThemedText, ThemedView } from "@/components/shared";
 import {
   moderateScale,
   moderateVerticalScale,
+  scale,
   screen,
   tw,
   verticalScale,
@@ -153,6 +154,7 @@ const CartScreen = () => {
       </View>
     );
   }, []);
+  console.log("screen.height * 0.7", screen.height * 0.7);
   return (
     <ThemedView
       accessible
@@ -167,9 +169,9 @@ const CartScreen = () => {
           ListEmptyComponent={() => {
             return (
               <View
-                style={tw` h-[${
-                  screen.height * 0.7
-                }px]  items-center justify-center   w-full`}
+                style={tw` h-[${moderateVerticalScale(
+                  450
+                )}px]  items-center justify-center   w-full`}
               >
                 <Ionicons
                   name="bag-handle-outline"
@@ -259,7 +261,7 @@ const CartScreen = () => {
             </ThemedText>
             <AntDesign
               name="right"
-              size={18}
+              size={scale(18)}
               style={tw` mt-0.5`}
               color="white"
             />

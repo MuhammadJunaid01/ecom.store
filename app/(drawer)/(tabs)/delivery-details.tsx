@@ -6,6 +6,10 @@ import { Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
 import showToast from "@/lib/utils/showToast";
 import { ThemedText } from "@/components/shared";
 import { convertCamelCase } from "@/lib/utils/utility";
+import { useAppDispatch } from "@/redux/hooks";
+import { addDeliveryAddress } from "@/redux/features/userSlice";
+import { IEcomAddress } from "@/lib/interfaces";
+import { router } from "expo-router";
 export interface AddressFormData {
   state: string;
   city: string;
@@ -15,6 +19,7 @@ export interface AddressFormData {
   country: string;
 }
 const DeliveryDetails = () => {
+  const dispatch = useAppDispatch();
   const addressTypes = useMemo(() => ["Home", "Shop", "Office"], []);
   const {
     control,
@@ -36,7 +41,7 @@ const DeliveryDetails = () => {
   const onSubmit = useCallback(
     async (data: AddressFormData) => {
       try {
-        const payloadAddress = {
+        const payloadAddress: IEcomAddress = {
           // _id: defaultDeliveryAddress?._id,
           addressType: data.title as string,
           street: data.street,
@@ -46,6 +51,10 @@ const DeliveryDetails = () => {
           country: data.country,
         };
         console.log("data", data);
+        dispatch(addDeliveryAddress(payloadAddress));
+        // router.replace("/(drawer)/(tabs)/place-order");
+        router.push("/(drawer)/(tabs)/place-order");
+        reset();
       } catch (error: any) {
         showToast({ type: "error", message: error?.data?.message });
       }
@@ -210,9 +219,9 @@ const DeliveryDetails = () => {
                 />
               )}
             />
-            {errors.state && (
+            {errors.country && (
               <ThemedText style={tw`text-red-500`}>
-                {errors.state.message}
+                {errors.country.message}
               </ThemedText>
             )}
           </View>
