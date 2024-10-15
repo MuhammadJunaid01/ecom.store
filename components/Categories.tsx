@@ -8,7 +8,7 @@ import {
 import React, { useCallback, useRef } from "react";
 import { ICategory } from "@/lib/interfaces";
 import { BottomModal, ThemedText, ThemedView } from "./shared";
-import { tw } from "@/constants/theme";
+import { moderateScale, tw } from "@/constants/theme";
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
 
 interface IProps {
@@ -26,7 +26,9 @@ const Categories = React.forwardRef<FlatList, IProps>(
       ({ item, index }) => (
         <TouchableOpacity
           onPress={() => onPressSelect(item, index)}
-          style={tw`w-auto py-3 px-9 rounded-full shadow-md my-3 ${
+          style={tw`w-auto h-[${moderateScale(
+            48
+          )}px]  justify-center px-9 rounded-full shadow-md my-0.5 ${
             selectedCategory === undefined && item.name === "All"
               ? "bg-black"
               : selectedCategory === item.name
@@ -36,7 +38,7 @@ const Categories = React.forwardRef<FlatList, IProps>(
         >
           <ThemedText
             fontFamily="OpenSansMedium"
-            style={tw`${
+            style={tw` text-[${moderateScale(16)}px] ${
               selectedCategory === undefined && item.name === "All"
                 ? "text-white"
                 : selectedCategory === item.name
@@ -56,10 +58,13 @@ const Categories = React.forwardRef<FlatList, IProps>(
       index,
     });
     return (
-      <ThemedView style={tw`my-2`}>
-        <ThemedView style={tw`flex-row items-center justify-between`}>
+      <ThemedView style={tw``}>
+        <ThemedView style={tw`flex-row h-12  items-center justify-between`}>
           <ThemedText>Categories</ThemedText>
-          <TouchableOpacity onPress={() => modalRef.current?.present()}>
+          <TouchableOpacity
+            style={tw` h-full w-auto items-center justify-center`}
+            onPress={() => modalRef.current?.present()}
+          >
             <ThemedText>See all</ThemedText>
           </TouchableOpacity>
         </ThemedView>

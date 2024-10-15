@@ -6,6 +6,7 @@ import {
   fetchBaseQuery,
   BaseQueryFn,
 } from "@reduxjs/toolkit/query/react";
+import { Alert } from "react-native";
 
 const baseQuery: BaseQueryFn = fetchBaseQuery({
   baseUrl: `${process.env.EXPO_PUBLIC_MAIN_API_URL}`,
@@ -22,7 +23,9 @@ const baseQuery: BaseQueryFn = fetchBaseQuery({
 });
 const baseQueryWithReauth: BaseQueryFn = async (args, api, extraOptions) => {
   let result: any = await baseQuery(args, api, extraOptions);
-
+  if (result.error && result.error.status === "FETCH_ERROR") {
+    Alert.alert("No Internet");
+  }
   if (result?.error?.status === 401) {
     // send refresh token to get new access token
     const refreshResult: any = await baseQuery(

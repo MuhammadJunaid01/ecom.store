@@ -62,3 +62,43 @@ export interface IGenericResponse<T> {
   data?: T;
   message?: string;
 }
+export interface IUser {
+  _id: string;
+  name: string;
+  email: string; // major update
+  mobile: string; // major update
+  password: string; // separate api
+  displayImage: string;
+  addresses: IEcomAddress[];
+  isActive: boolean;
+  role?: string;
+  // cart: IEComUserCartItem[];
+  // wishList?: IEComWishList[];
+  attemptWrongPassword: number;
+  blockingInfo: {
+    isBlocked: boolean;
+    blockedUntil: Date | null;
+  };
+  lastChangedPassword: Date;
+  isDeleted: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}
+export interface IEcomAddress {
+  addressType: AddressType | string;
+  street: string;
+  city: string;
+  state: string;
+  country: string;
+  postalCode?: string;
+  coordinates?: [number, number];
+  isDefault?: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}
+export enum AddressType {
+  HOME = "home",
+  OFFICE = "office",
+  SHOP = "shop",
+  OTHER = "other",
+}

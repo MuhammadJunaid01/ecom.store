@@ -1,22 +1,19 @@
-import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, Image, TouchableOpacity } from "react-native";
 import React, { useMemo } from "react";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { Drawer } from "expo-router/drawer";
-import {
-  DrawerContentScrollView,
-  DrawerItem,
-  DrawerToggleButton,
-} from "@react-navigation/drawer";
+import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
 import { router, useNavigation, useSegments } from "expo-router";
-import { tw } from "@/constants/theme";
+import { moderateScale, scale, screen, tw } from "@/constants/theme";
 import {
-  AntDesign,
   EvilIcons,
+  Feather,
   Ionicons,
   MaterialIcons,
-} from "@expo/vector-icons";
+} from "@expo/vector-icons"; // Added MaterialIcons for the logout icon
 import { DrawerActions } from "@react-navigation/native";
 import { useAppSelector } from "@/redux/hooks";
+import { ThemedText } from "@/components/shared";
+
 const _layout = () => {
   const navigation = useNavigation();
   const { items } = useAppSelector((state) => state.cart);
@@ -30,33 +27,60 @@ const _layout = () => {
       initialRouteName="(tabs)"
       screenOptions={{
         headerLeft: () => (
-          <View style={tw` pl-2.2`}>
+          <View style={tw` pl-2.2 h-14 items-center justify-center`}>
             <TouchableOpacity
-              style={tw` border border-gray-100 p-2 rounded-full`}
+              accessibilityRole="button"
+              accessibilityHint="Tap for navigation screen"
+              style={tw`  flex-row items-center h-12 gap-x-2`}
               onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}
             >
-              <Image
-                source={{
-                  uri: "https://cdn.dummyjson.com/products/images/fragrances/Chanel%20Coco%20Noir%20Eau%20De/thumbnail.png",
-                }}
-                alt="Ecom Store Logo"
-                style={tw` h-[30px] w-[30px] rounded-full  `}
-                resizeMode="cover"
+              <Feather
+                name="align-left"
+                size={moderateScale(20)}
+                style={tw` text-gray-700 mt-0.6`}
               />
+              <ThemedText
+                accessibilityHint="App Name"
+                accessibilityLabel="Ecom Store"
+                style={tw` text-[${moderateScale(16)}px]`}
+                fontFamily="OpenSansSemiBold"
+              >
+                Ecom Store
+              </ThemedText>
             </TouchableOpacity>
           </View>
         ),
         headerRight: () => (
-          <View style={tw` pr-3 flex-row items-center gap-x-2 justify-center`}>
-            <TouchableOpacity onPress={() => console.log("HEllo")}>
+          <View
+            accessibilityLabel="TopBar cart"
+            accessible={true}
+            style={tw` pr-3 h-14  flex-row items-center gap-x-2 justify-center`}
+          >
+            <TouchableOpacity
+              accessibilityRole="button"
+              accessibilityLabel="Search product"
+              accessibilityHint="Tap for search products"
+              style={tw` h-12 w-12 items-center justify-center`}
+              onPress={() => console.log("HEllo")}
+            >
               <EvilIcons
                 name="search"
-                size={33}
+                size={moderateScale(28)}
                 style={tw` text-gray-500 mb-1`}
               />
             </TouchableOpacity>
-            <View>
-              <Ionicons name="bag-outline" size={28} color="black" />
+            <TouchableOpacity
+              accessibilityRole="button"
+              accessibilityLabel="navigate cart screen"
+              accessibilityHint="Tap for navigate cart screen"
+              style={tw` h-12 w-12 items-center justify-center`}
+              onPress={() => router.push("/(drawer)/(tabs)/cart")}
+            >
+              <Ionicons
+                name="bag-outline"
+                size={moderateScale(22)}
+                color="black"
+              />
               <View
                 style={tw` h-[18px] w-[18px]  bg-gray-900 rounded-full flex-row items-center justify-center absolute top-[10px]  right-[-3px] z-50`}
               >
@@ -64,10 +88,9 @@ const _layout = () => {
                   {totalCartItems || 0}
                 </Text>
               </View>
-            </View>
+            </TouchableOpacity>
           </View>
         ),
-        // headerTransparent: true,
       }}
     >
       <Drawer.Screen
@@ -83,13 +106,25 @@ const _layout = () => {
 };
 
 export default _layout;
+
 const CustomDrawerContent = (props: any) => {
   const { state, descriptors, navigation } = props;
   const segments = useSegments();
+
+  const handleLogout = () => {
+    // Perform logout logic here, e.g., clear session, redirect to login
+    // console.log("Logout Pressed");
+    // router.replace("/auth/login"); // Replace with your login screen route
+  };
+
   return (
-    <DrawerContentScrollView {...props}>
+    <DrawerContentScrollView
+      contentContainerStyle={tw` h-full flex-1  relative`}
+      style={tw` `}
+      {...props}
+    >
       <View
-        style={tw` flex-col items-center justify-center gap-y-3 border-b border-gray-300 pb-5`}
+        style={tw`  relative flex-col items-center justify-center gap-y-3 border-b border-gray-300 pb-5`}
       >
         <Image
           source={{ uri: "https://randomuser.me/api/portraits/women/26.jpg" }}
@@ -98,19 +133,28 @@ const CustomDrawerContent = (props: any) => {
           style={tw` rounded-full items-center justify-center`}
         />
         <View style={tw` items-center justify-center`}>
-          <Text style={tw` text-xl`}>John Doe</Text>
-          <Text style={tw``}>john@email.com</Text>
+          <ThemedText
+            fontFamily="OpenSansSemiBold"
+            style={tw` text-xl tracking-wider`}
+          >
+            John Doe
+          </ThemedText>
+          <ThemedText
+            fontFamily="OpenSansRegular"
+            style={tw` text-sm tracking-wider`}
+          >
+            john@email.com
+          </ThemedText>
         </View>
       </View>
-      <View>
+
+      <View style={tw`  `}>
         {state.routes.map((route: any, index: any) => {
           const focused = index === state.index;
           const { drawerLabel } = descriptors[route.key].options;
           const label = (
             (drawerLabel !== undefined ? drawerLabel : route.name) as string
-          ).replace(/[()]/g, ""); // Step 1: Remove parentheses
-          // console.log("label", label);
-          // Step 2: Capitalize first letter and concatenate the rest of the string
+          ).replace(/[()]/g, "");
           const formattedLabel =
             label == "tabs"
               ? "Home"
@@ -122,7 +166,6 @@ const CustomDrawerContent = (props: any) => {
               focused={focused}
               onPress={() => {
                 if (segments.join("/") === "(drawer)/(tabs)/profile") {
-                  // navigation.replace("/");
                   navigation.navigate(route.name);
                 } else {
                   navigation.navigate(route.name);
@@ -132,43 +175,15 @@ const CustomDrawerContent = (props: any) => {
           );
         })}
       </View>
+
+      {/* Logout Button */}
+      <TouchableOpacity
+        style={tw`flex-row  w-full gap-x-3 items-center py-4 px-6 absolute  bottom-1`}
+        onPress={handleLogout}
+      >
+        <Text style={tw`ml-4 text-base text-gray-700`}>Logout</Text>
+        <MaterialIcons name="logout" size={24} color="black" />
+      </TouchableOpacity>
     </DrawerContentScrollView>
   );
 };
-const styles = StyleSheet.create({
-  navItemLabel: {
-    marginLeft: -20,
-    fontSize: 18,
-  },
-  activeLabel: {
-    fontWeight: "bold",
-    color: "blue", // Active color
-  },
-  inactiveLabel: {
-    color: "gray", // Inactive color
-  },
-  userInfoWrapper: {
-    flexDirection: "row",
-    paddingHorizontal: 10,
-    paddingVertical: 20,
-    borderBottomColor: "#ccc",
-    borderBottomWidth: 1,
-    marginBottom: 10,
-  },
-  userImg: {
-    borderRadius: 40,
-  },
-  userDetailsWrapper: {
-    marginTop: 25,
-    marginLeft: 10,
-  },
-  userName: {
-    fontSize: 16,
-    fontWeight: "bold",
-  },
-  userEmail: {
-    fontSize: 16,
-    fontStyle: "italic",
-    textDecorationLine: "underline",
-  },
-});

@@ -1,10 +1,16 @@
 import { Dimensions } from "react-native";
 import tw from "twrnc";
 const screen = Dimensions.get("screen");
+import {
+  scale,
+  moderateScale,
+  moderateVerticalScale,
+  verticalScale,
+} from "react-native-size-matters";
 
 const screenWidth = Dimensions.get("window").width;
 const screenHeight = Dimensions.get("window").width;
-export { tw, screenWidth, screenHeight, screen };
+
 export const fonts = {
   OpenSansBold: require("../assets/fonts/OpenSans-Bold.ttf"),
   OpenSansBoldItalic: require("../assets/fonts/OpenSans-BoldItalic.ttf"),
@@ -27,4 +33,15 @@ export const fonts = {
   OpenSansSemiCondensedLightItalic: require("../assets/fonts/OpenSans_SemiCondensed-LightItalic.ttf"),
   OpenSansSemiCondensedSemiBoldItalic: require("../assets/fonts/OpenSans_SemiCondensed-SemiBoldItalic.ttf"),
 };
-export type FontNames = keyof typeof fonts;
+type FontNames = keyof typeof fonts;
+export {
+  tw,
+  screenWidth,
+  screenHeight,
+  screen,
+  FontNames,
+  scale,
+  moderateScale,
+  moderateVerticalScale,
+  verticalScale,
+};

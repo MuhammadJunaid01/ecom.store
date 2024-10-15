@@ -1,6 +1,6 @@
 import { View, TouchableOpacity, Image, ImageBackground } from "react-native";
 import React, { memo, useEffect, useRef, useState } from "react";
-import { screen, tw } from "@/constants/theme";
+import { scale, screen, tw, verticalScale } from "@/constants/theme";
 import ThemedView from "./ThemedView";
 import PagerView from "react-native-pager-view";
 import ThemedText from "./ThemedText";
@@ -41,29 +41,28 @@ const Slider: React.FC<ISliderProps> = ({ sliders }) => {
     // Clear interval on component unmount
     return () => clearInterval(interval);
   }, [sliders.length]);
-  const generateColor = (index: number) => {
-    switch (index) {
-      case 0:
-        return {
-          bg: `bg-green-400`,
-          text: "text-white",
-        };
-      case 1:
-        return { bg: `bg-gray-900`, text: "text-white" };
-      case 2:
-        return { bg: `bg-gray-900`, text: "text-white" };
-      case 3:
-        return { bg: `bg-indigo-400`, text: "text-black" };
-      case 4:
-        return { bg: `bg-emerald-400`, text: "text-white" };
+  // const generateColor = (index: number) => {
+  //   switch (index) {
+  //     case 0:
+  //       return {
+  //         bg: `bg-green-400`,
+  //         text: "text-white",
+  //       };
+  //     case 1:
+  //       return { bg: `bg-gray-900`, text: "text-white" };
+  //     case 2:
+  //       return { bg: `bg-gray-900`, text: "text-white" };
+  //     case 3:
+  //       return { bg: `bg-indigo-400`, text: "text-black" };
+  //     case 4:
+  //       return { bg: `bg-emerald-400`, text: "text-white" };
 
-      default:
-        return { bg: `bg-gray-900`, text: "text-white" };
-    }
-  };
-  const { bg, text } = generateColor(currentPage);
+  //     default:
+  //       return { bg: `bg-gray-900`, text: "text-white" };
+  //   }
+  // };
   return (
-    <View style={tw`mt-0 h-[${sliderHeight}px]    bg-gray-900  px-4`}>
+    <View style={tw`mt-0 h-[${verticalScale(160)}px]    bg-gray-900  px-4`}>
       <PagerView
         ref={pagerRef}
         onPageSelected={onPageSelected}
@@ -80,13 +79,17 @@ const Slider: React.FC<ISliderProps> = ({ sliders }) => {
                 // ellipsizeMode="tail"
                 // numberOfLines={1}
                 fontFamily="OpenSansBold"
-                style={tw` font-medium text-2xl w-full leading-10   text-white`}
+                style={tw` font-medium my-2 text-[${scale(
+                  16
+                )}px] w-full leading-10   text-white`}
               >
                 {slide.title.slice(0, 10)}
               </ThemedText>
               <ThemedText
                 fontFamily="OpenSansLight"
-                style={tw` text-white  font-medium text-sm tracking-wider`}
+                style={tw` text-white  my-1 font-medium text-[${scale(
+                  12
+                )}px] tracking-wider`}
               >
                 {slide.warranty}
               </ThemedText>
