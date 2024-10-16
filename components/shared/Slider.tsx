@@ -68,7 +68,9 @@ const Slider: React.FC<ISliderProps> = ({ sliders }) => {
   //   }
   // };
   return (
-    <View style={tw`mt-0 h-[${moderateScale(168)}px]    bg-gray-900  px-4`}>
+    <View
+      style={tw`mt-0 h-[${moderateScale(168)}px] w-full   bg-gray-900  px-4`}
+    >
       <PagerView
         ref={pagerRef}
         onPageSelected={onPageSelected}

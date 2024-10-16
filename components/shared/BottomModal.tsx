@@ -10,10 +10,16 @@ interface IProps {
   ModalBody: React.ComponentType;
   heights?: string[];
   defaultIndex?: number;
+  isShowHeader?: boolean;
 }
 const BottomModal = React.forwardRef<BottomSheetModal, IProps>(
   (
-    { ModalBody, heights = ["25%", "50%", "70%", "85"], defaultIndex = 1 },
+    {
+      ModalBody,
+      heights = ["25%", "50%", "70%", "85"],
+      defaultIndex = 1,
+      isShowHeader = true,
+    },
     ref
   ) => {
     //   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
