@@ -101,3 +101,7 @@ export enum AddressType {
   SHOP = "shop",
   OTHER = "other",
 }
+export type Tab = {
+  label: string;
+  query: string;
+};

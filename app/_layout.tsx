@@ -47,6 +47,7 @@ export default function RootLayout() {
                 <Stack.Screen name="index" options={{ headerShown: false }} />
                 <Stack.Screen name="(drawer)" />
                 <Stack.Screen name="(auth)" />
+                <Stack.Screen name="(orders)" />
               </Stack>
             </BottomSheetModalProvider>
           </PersistGate>

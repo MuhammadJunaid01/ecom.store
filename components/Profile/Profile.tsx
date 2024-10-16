@@ -22,6 +22,7 @@ import { useForm } from "react-hook-form";
 import { CameraView, useCameraPermissions } from "expo-camera";
 import { ProfileTab, UpdateUser, UploadPictureModalBody } from ".";
 import UniversalCamera from "../shared/UniversalCamera";
+import { router } from "expo-router";
 interface IProps {
   user?: IUser;
 }
@@ -61,12 +62,31 @@ const Profile: React.FC<IProps> = ({ user }) => {
             autoPlay
             loop={false}
           />
+          <View
+            style={tw` absolute left-3 top-[${moderateVerticalScale(
+              160 / 2
+            )}px]`}
+          >
+            <ThemedText
+              fontFamily="OpenSansBold"
+              style={tw` text-white  text-[${scale(14)}px]   tracking-wider`}
+            >
+              Welcome
+            </ThemedText>
+            <ThemedText
+              style={tw` text-white  text-[${moderateVerticalScale(
+                11
+              )}px] tracking-widest`}
+            >
+              Ecom Store
+            </ThemedText>
+          </View>
         </View>
       </View>
       <View
-        style={tw` mt-[-10px]  flex-row   justify-between   shadow-2xl bg-white rounded-full  `}
+        style={tw` mt-[-33px]  flex-row   justify-between   shadow-2xl bg-white rounded-full  `}
       >
-        <View style={tw` flex-row gap-x-[${scale(7)}px]`}>
+        <View style={tw` flex-row p-1 gap-x-[${scale(7)}px]`}>
           <Image
             source={{ uri: userInfo.displayImage }}
             width={scale(60)}
@@ -95,14 +115,14 @@ const Profile: React.FC<IProps> = ({ user }) => {
           }}
           style={tw`  absolute  right-[${scale(0)}] -top-[${scale(
             1
-          )}] bg-white rounded-full h-[${scale(33)}px] w-[${scale(
+          )}] bg-gray-900 flex-row rounded-full h-[${scale(33)}px] w-[${scale(
             33
           )}px] items-center justify-center`}
         >
           <FontAwesome
             name="edit"
             size={scale(15)}
-            style={tw` text-gray-700`}
+            style={tw` text-gray-50 ml-1`}
           />
         </TouchableOpacity>
       </View>
@@ -112,7 +132,11 @@ const Profile: React.FC<IProps> = ({ user }) => {
           contentContainerStyle={tw` px-3 flex-col gap-2 my-3 `}
           showsVerticalScrollIndicator={false}
         >
-          <ProfileTab title="My Order" label="Already have 12 orders" />
+          <ProfileTab
+            title="My Order"
+            onPress={() => router.push("/(orders)/my-orders" as any)}
+            label="Already have 12 orders"
+          />
           <ProfileTab title="Shipping Addresses" label="3 Address" />
           <ProfileTab title="Payment methods" label="Visa  **88" />
           <ProfileTab title="Promocodes" label="You have special promocodes" />
@@ -133,7 +157,7 @@ const Profile: React.FC<IProps> = ({ user }) => {
                 <UploadPictureModalBody
                   onPressUploadImageFromGallery={(img) => {
                     setUserInfo((prev) => ({ ...prev, displayImage: img }));
-                    // bottomSheetModalRef.current?.present();
+                    bottomSheetModalRef.current?.dismiss();
                     setIsTakePicture(false);
                   }}
                   onPress={() => {
@@ -166,6 +190,9 @@ const Profile: React.FC<IProps> = ({ user }) => {
       >
         <View style={tw`flex-1 `}>
           <UniversalCamera
+            onCameraClose={() => {
+              setIsTakePicture(false);
+            }}
             ref={cameraRef}
             onPressTakePicture={async () => {
               if (cameraRef.current) {

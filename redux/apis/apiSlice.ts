@@ -52,7 +52,7 @@ const baseQueryWithReauth: BaseQueryFn = async (args, api, extraOptions) => {
   return result;
 };
 export const apiSlice = createApi({
-  tagTypes: [],
+  tagTypes: ["products", "product"],
   baseQuery: baseQueryWithReauth,
   endpoints: (builder) => ({}),
 });

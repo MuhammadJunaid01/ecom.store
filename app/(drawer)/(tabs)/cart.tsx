@@ -20,7 +20,12 @@ import {
 } from "@/constants/theme";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import showToast from "@/lib/utils/showToast";
-import { clearCart, removeFromCart } from "@/redux/features/cartSlice";
+import {
+  clearCart,
+  decreaseQuantity,
+  increaseQuantity,
+  removeFromCart,
+} from "@/redux/features/cartSlice";
 import {
   Ionicons,
   FontAwesome6,
@@ -31,6 +36,7 @@ import {
 import { router } from "expo-router";
 import { ICartItem } from "@/lib/interfaces";
 import { convertCamelCase } from "@/lib/utils/utility";
+import { CartItem } from "@/components";
 
 const CartScreen = () => {
   const dispatch = useAppDispatch();
@@ -38,120 +44,11 @@ const CartScreen = () => {
   const { items } = useAppSelector((state) => state.cart);
   const renderItem: ListRenderItem<ICartItem> = useCallback(({ item }) => {
     return (
-      <View
-        style={tw`w-full overflow-hidden h-[${verticalScale(
-          100
-        )}px] mb-2 rounded-lg p-1 flex-row items-start gap-x-2 bg-white shadow border border-gray-100`}
-      >
-        {/* Product image */}
-        <TouchableOpacity
-          // onPress={() => onProductPress((item?.item as any)?._id as string)}
-          style={tw` h-[80%] w-20 rounded bg-gray-50 overflow-hidden`}
-        >
-          {item?.thumbnail && (
-            <Image
-              source={{ uri: item?.thumbnail }}
-              style={tw` h-full w-auto`}
-              resizeMode="contain"
-              // contentFit="contain"
-              // placeholder={{ blurhash }}
-            />
-          )}
-        </TouchableOpacity>
-        {/* content view */}
-        <View style={tw`  flex-1 pb-0.5 h-full  justify-between `}>
-          <View style={tw` flex-1  flex-col gap-y-1`}>
-            <ThemedText
-              fontFamily="OpenSansSemiBold"
-              // onPress={() => onProductPress((item?.item as any)?._id)}
-              numberOfLines={2}
-              ellipsizeMode="tail"
-              // fontFamily="OpenSansLight"
-              style={tw`w-full text-base   text-black tracking-wider `}
-            >
-              {item?.title}
-            </ThemedText>
-
-            <View style={tw`flex-col  gap-y-1 items-start `}>
-              <ThemedText
-                fontFamily="OpenSansLight"
-                style={tw`  text-xs  text-gray-700`}
-              >
-                Unit Price: ${item?.price}
-              </ThemedText>
-            </View>
-            <View style={tw`flex-row gap-x-2  items-center`}>
-              <ThemedText
-                fontFamily="OpenSansLight"
-                style={tw`text-sm font-medium`}
-              >
-                Total:${item?.quantity * item?.price}
-              </ThemedText>
-
-              <TouchableOpacity
-                accessibilityRole="button"
-                accessibilityLabel="Remove"
-                accessibilityHint=" Tap for remove from cart"
-                style={tw` flex-row gap-x-1   h-12 w-auto items-center justify-center `}
-                onPress={() => {
-                  showToast({
-                    type: "success",
-                    message: "successfully deleted from cart.",
-                  });
-                }}
-                // style={tw`flex-row px-1.5 py-[1px] border rounded-md border-gray-400 gap-x-1`}
-              >
-                <View
-                  style={tw` bg-red-200/50 flex-row items-center justify-center gap-x-2 py-1 px-1 rounded`}
-                >
-                  <MaterialIcons
-                    name="delete-outline"
-                    size={14}
-                    color="black"
-                  />
-                  <ThemedText style={tw`text-[12px] text-black`}>
-                    Remove
-                  </ThemedText>
-                </View>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-
-        <View style={tw` flex-col items-center h-full  justify-between`}>
-          <View style={tw` flex-col  gap-y-1`}>
-            <Pressable
-              accessibilityLabel="Minus Icon"
-              accessibilityHint="Decrease from cart item"
-              accessibilityRole="button"
-              // onPress={() => {
-              //   handleAddToCart({ sku: item.sku as any });
-              // }}
-              style={tw`  h-12 w-12 items-center justify-center `}
-            >
-              <Feather name="minus" size={20} color="black" />
-            </Pressable>
-
-            <TextInput
-              editable={false}
-              keyboardType="numeric"
-              textAlign="center"
-              style={tw` text-sm text-black font-medium text-center`}
-              defaultValue={String(item?.quantity)}
-              // value={String(productItemQuantity)}
-            />
-            <Pressable
-              accessibilityLabel="Plus Icon"
-              accessibilityHint="Increase from cart item"
-              accessibilityRole="button"
-              onPress={() => {}}
-              style={tw`  h-12 w-12 items-center justify-center `}
-            >
-              <Feather name="plus" size={18} color="black" />
-            </Pressable>
-          </View>
-        </View>
-      </View>
+      <CartItem
+        {...item}
+        onDecrease={(id) => dispatch(decreaseQuantity({ id }))}
+        onIncrease={(id) => dispatch(increaseQuantity({ id }))}
+      />
     );
   }, []);
   console.log("screen.height * 0.7", screen.height * 0.7);

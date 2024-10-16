@@ -12,7 +12,8 @@ interface IProfileTab {
 }
 const ProfileTab: React.FC<IProfileTab> = memo(({ title, label, onPress }) => {
   return (
-    <View
+    <TouchableOpacity
+      onPress={() => onPress?.()}
       style={tw`   bg-transparent  border-b border-gray-100 h-[${scale(
         72
       )}px]  flex-row px-2 rounded  justify-between items-center gap-y-[${scale(
@@ -33,8 +34,7 @@ const ProfileTab: React.FC<IProfileTab> = memo(({ title, label, onPress }) => {
           {label}
         </ThemedText>
       </View>
-      <TouchableOpacity
-        onPress={() => onPress?.()}
+      <View
         style={tw` h-[${scale(33)}px] w-[${scale(
           33
         )}px] items-center justify-center`}
@@ -44,8 +44,8 @@ const ProfileTab: React.FC<IProfileTab> = memo(({ title, label, onPress }) => {
           size={scale(19)}
           style={tw` mt-1 text-gray-700`}
         />
-      </TouchableOpacity>
-    </View>
+      </View>
+    </TouchableOpacity>
   );
 });
 

@@ -11,8 +11,16 @@ const productsApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getAllProducts: builder.query<ProductsResponse, string>({
       query: (query) => `/products?${query}`,
+      providesTags: ["products"],
+    }),
+    getProductByProductId: builder.query<IProduct, string>({
+      query: (query) => `/products/${query}`,
+      providesTags: ["products"],
     }),
   }),
 });
-export const { useGetAllProductsQuery, useLazyGetAllProductsQuery } =
-  productsApiSlice;
+export const {
+  useGetAllProductsQuery,
+  useLazyGetAllProductsQuery,
+  useLazyGetProductByProductIdQuery,
+} = productsApiSlice;

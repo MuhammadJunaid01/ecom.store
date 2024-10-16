@@ -1,4 +1,3 @@
-// src/redux/slices/cartSlice.ts
 import { ICartItem, IProduct } from "@/lib/interfaces";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
@@ -55,34 +54,53 @@ const cartSlice = createSlice({
       }
     },
 
-    // Update quantity of an item in the cart
-    updateCartItemQuantity: (
-      state,
-      action: PayloadAction<{ id: number; quantity: number }>
-    ) => {
-      const { id, quantity } = action.payload;
-      const existingCartItem = state.items.find((item) => item.id === id);
+    // Increase quantity of an item in the cart
+    increaseQuantity: (state, action: PayloadAction<{ id: number }>) => {
+      const existingCartItem = state.items.find(
+        (item) => item.id === action.payload.id
+      );
 
       if (existingCartItem) {
-        const quantityDifference = quantity - existingCartItem.quantity;
-
-        existingCartItem.quantity = quantity;
-        state.totalQuantity += quantityDifference;
-        state.totalPrice += quantityDifference * existingCartItem.price;
+        existingCartItem.quantity += 1;
+        state.totalQuantity += 1;
+        state.totalPrice += existingCartItem.price;
       }
     },
+
+    // Decrease quantity of an item in the cart
+    decreaseQuantity: (state, action: PayloadAction<{ id: number }>) => {
+      const existingCartItem = state.items.find(
+        (item) => item.id === action.payload.id
+      );
+
+      if (existingCartItem && existingCartItem.quantity > 1) {
+        existingCartItem.quantity -= 1;
+        state.totalQuantity -= 1;
+        state.totalPrice -= existingCartItem.price;
+      } else if (existingCartItem && existingCartItem.quantity === 1) {
+        // If quantity is 1, remove the item from the cart
+        state.items = state.items.filter(
+          (item) => item.id !== action.payload.id
+        );
+        state.totalQuantity -= 1;
+        state.totalPrice -= existingCartItem.price;
+      }
+    },
+
+    // Add or remove item from wishlist
     addToWishList: (state, action: PayloadAction<IProduct>) => {
-      const isProductExist = state.wishlist?.find(
-        (list) => list?.id == action?.payload?.id
+      const isProductExist = state.wishlist.find(
+        (list) => list.id === action.payload.id
       );
       if (!isProductExist) {
         state.wishlist.push(action.payload);
       } else {
-        state.wishlist = state.wishlist?.filter(
+        state.wishlist = state.wishlist.filter(
           (list) => list.id !== action.payload.id
         );
       }
     },
+
     // Clear the entire cart
     clearCart: (state) => {
       state.items = [];
@@ -95,7 +113,8 @@ const cartSlice = createSlice({
 export const {
   addToCart,
   removeFromCart,
-  updateCartItemQuantity,
+  increaseQuantity,
+  decreaseQuantity,
   clearCart,
   addToWishList,
 } = cartSlice.actions;

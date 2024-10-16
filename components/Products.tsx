@@ -4,7 +4,7 @@ import { IProduct } from "@/lib/interfaces";
 import { ThemedText, ThemedView } from "./shared";
 import { scale, tw, verticalScale } from "@/constants/theme";
 import { Rating } from "react-native-ratings";
-import { AntDesign, Entypo } from "@expo/vector-icons";
+import { AntDesign, Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useAppDispatch } from "@/redux/hooks";
 import { addToCart, addToWishList } from "@/redux/features/cartSlice";
 import showToast from "@/lib/utils/showToast";
@@ -43,6 +43,7 @@ const Products: React.FC<IProps> = ({ products, isFetching, hasMore }) => {
     }
     return null;
   }, [isFetching]);
+
   return (
     <ThemedView accessible accessibilityHint="Products" style={tw` flex-1 `}>
       <ThemedText

@@ -6,9 +6,10 @@ import { tw } from "@/constants/theme";
 import { Feather, EvilIcons } from "@expo/vector-icons";
 interface IProps {
   onPressTakePicture: () => void;
+  onCameraClose: () => void;
 }
 const UniversalCamera = React.forwardRef<CameraView, IProps>(
-  ({ onPressTakePicture }, ref) => {
+  ({ onPressTakePicture, onCameraClose }, ref) => {
     const [cameraReady, setCameraReady] = useState(false);
 
     const [permission, requestPermission] = useCameraPermissions();
@@ -69,7 +70,7 @@ const UniversalCamera = React.forwardRef<CameraView, IProps>(
                   </TouchableOpacity>
                 </View>
                 <View style={tw` absolute  top-11 right-4`}>
-                  <TouchableOpacity>
+                  <TouchableOpacity onPress={onCameraClose}>
                     <EvilIcons
                       name="close"
                       size={27}
