@@ -31,86 +31,83 @@ const _layout = () => {
       drawerContent={(props) => <CustomDrawerContent {...props} />}
       initialRouteName="(tabs)"
       screenOptions={{
-        headerLeft: () =>
-          isProfileScreen ? null : (
-            <View style={tw` pl-2.2 h-14 items-center justify-center`}>
-              <TouchableOpacity
-                accessibilityRole="button"
-                accessibilityHint="Tap for navigation screen"
-                style={tw`  flex-row items-center h-12 gap-x-2`}
-                onPress={() =>
-                  navigation.dispatch(DrawerActions.toggleDrawer())
-                }
-              >
-                <Feather
-                  name="align-left"
-                  size={moderateScale(20)}
-                  style={tw` text-gray-700 mt-0.6`}
-                />
-                <ThemedText
-                  accessibilityHint="App Name"
-                  accessibilityLabel="Ecom Store"
-                  style={tw` text-[${moderateScale(16)}px]`}
-                  fontFamily="OpenSansSemiBold"
-                >
-                  Ecom Store
-                </ThemedText>
-              </TouchableOpacity>
-            </View>
-          ),
-        headerRight: () =>
-          isProfileScreen ? null : (
-            <View
-              accessibilityLabel="TopBar cart"
-              accessible={true}
-              style={tw` pr-3 h-14  flex-row items-center gap-x-2 justify-center`}
-            >
-              <TouchableOpacity
-                accessibilityRole="button"
-                accessibilityLabel="Search product"
-                accessibilityHint="Tap for search products"
-                style={tw` h-12 w-12 items-center justify-center`}
-                onPress={() => console.log("HEllo")}
-              >
-                <EvilIcons
-                  name="search"
-                  size={moderateScale(28)}
-                  style={tw` text-gray-500 mb-1`}
-                />
-              </TouchableOpacity>
-              <TouchableOpacity
-                accessibilityRole="button"
-                accessibilityLabel="navigate cart screen"
-                accessibilityHint="Tap for navigate cart screen"
-                style={tw` h-12 w-12 items-center justify-center`}
-                onPress={() => router.push("/(drawer)/(tabs)/cart")}
-              >
-                <Ionicons
-                  name="bag-outline"
-                  size={moderateScale(22)}
-                  color="black"
-                />
-                <View
-                  style={tw` h-[18px] w-[18px]  bg-gray-900 rounded-full flex-row items-center justify-center absolute top-[10px]  right-[-3px] z-50`}
-                >
-                  <Text style={tw`text-[10px] text-white`}>
-                    {totalCartItems || 0}
-                  </Text>
-                </View>
-              </TouchableOpacity>
-            </View>
-          ),
-        headerShown: !isProfileScreen,
+        // headerLeft: () =>
+        //   isProfileScreen ? null : (
+        //     <View style={tw` pl-2.2 h-14 items-center justify-center`}>
+        //       <TouchableOpacity
+        //         accessibilityRole="button"
+        //         accessibilityHint="Tap for navigation screen"
+        //         style={tw`  flex-row items-center h-12 gap-x-2`}
+        //         onPress={() =>
+        //           navigation.dispatch(DrawerActions.toggleDrawer())
+        //         }
+        //       >
+        //         <Feather
+        //           name="align-left"
+        //           size={moderateScale(20)}
+        //           style={tw` text-gray-700 mt-0.6`}
+        //         />
+        //         <ThemedText
+        //           accessibilityHint="App Name"
+        //           accessibilityLabel="Ecom Store"
+        //           style={tw` text-[${moderateScale(16)}px]`}
+        //           fontFamily="OpenSansSemiBold"
+        //         >
+        //           Ecom Store
+        //         </ThemedText>
+        //       </TouchableOpacity>
+        //     </View>
+        //   ),
+        // headerRight: () =>
+        //   isProfileScreen ? null : (
+        //     <View
+        //       accessibilityLabel="TopBar cart"
+        //       accessible={true}
+        //       style={tw` pr-3 h-14  flex-row items-center gap-x-2 justify-center`}
+        //     >
+        //       <TouchableOpacity
+        //         accessibilityRole="button"
+        //         accessibilityLabel="Search product"
+        //         accessibilityHint="Tap for search products"
+        //         style={tw` h-12 w-12 items-center justify-center`}
+        //         onPress={() => console.log("HEllo")}
+        //       >
+        //         <EvilIcons
+        //           name="search"
+        //           size={moderateScale(28)}
+        //           style={tw` text-gray-500 mb-1`}
+        //         />
+        //       </TouchableOpacity>
+        //       <TouchableOpacity
+        //         accessibilityRole="button"
+        //         accessibilityLabel="navigate cart screen"
+        //         accessibilityHint="Tap for navigate cart screen"
+        //         style={tw` h-12 w-12 items-center justify-center`}
+        //         onPress={() => router.push("/(drawer)/(tabs)/cart")}
+        //       >
+        //         <Ionicons
+        //           name="bag-outline"
+        //           size={moderateScale(22)}
+        //           color="black"
+        //         />
+        //         <View
+        //           style={tw` h-[18px] w-[18px]  bg-gray-900 rounded-full flex-row items-center justify-center absolute top-[10px]  right-[-3px] z-50`}
+        //         >
+        //           <Text style={tw`text-[10px] text-white`}>
+        //             {totalCartItems || 0}
+        //           </Text>
+        //         </View>
+        //       </TouchableOpacity>
+        //     </View>
+        //   ),
+        headerShown: false,
       }}
     >
       <Drawer.Screen
         name="(tabs)"
         options={{ title: "Home", headerTitleStyle: { display: "none" } }}
       />
-      <Drawer.Screen
-        name="akbar"
-        options={{ title: "Akbar", headerTitleStyle: { display: "none" } }}
-      />
+      <Drawer.Screen name="akbar" options={{ title: "", headerShown: true }} />
     </Drawer>
   );
 };

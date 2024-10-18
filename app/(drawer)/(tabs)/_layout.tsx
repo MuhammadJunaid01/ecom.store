@@ -1,22 +1,26 @@
-import { View, Text, Platform } from "react-native";
+import { View, Text, Platform, StatusBar } from "react-native";
 import React, { useMemo } from "react";
-import { Tabs } from "expo-router";
-import { tw } from "@/constants/theme";
+import { router, Tabs } from "expo-router";
+import { scale, tw } from "@/constants/theme";
 import {
   MaterialIcons,
   MaterialCommunityIcons,
   Ionicons,
   FontAwesome5,
+  Entypo,
+  Feather,
+  AntDesign,
 } from "@expo/vector-icons";
 import { useAppSelector } from "@/redux/hooks";
 import { ThemedText } from "@/components/shared";
 
 const TabsLayout = () => {
-  const { items } = useAppSelector((state) => state.cart);
+  const { items, wishlist } = useAppSelector((state) => state.cart);
   const totalCartItems = useMemo(
     () => items?.reduce((acc, cur) => acc + cur.quantity, 0) || 0,
     [items]
   );
+  const totalWishlistItems = useMemo(() => wishlist.length, [wishlist]);
   return (
     <Tabs
       screenOptions={({ route }) => ({
@@ -64,6 +68,34 @@ const TabsLayout = () => {
                   />
                 </View>
               );
+            case "favorites":
+              return focused ? (
+                <View style={tw`relative`}>
+                  {totalWishlistItems > 0 && (
+                    <View
+                      style={tw`px-1.5 py-[1px] bg-gray-900 rounded-full flex-row items-center justify-center absolute left-[23px] z-50`}
+                    >
+                      <ThemedText style={tw`text-[10px] text-white`}>
+                        {totalWishlistItems}
+                      </ThemedText>
+                    </View>
+                  )}
+                  <AntDesign name="heart" size={20} color="#030712" />
+                </View>
+              ) : (
+                <View style={tw`relative`}>
+                  {totalWishlistItems > 0 && (
+                    <View
+                      style={tw`px-1.5 py-[1px] bg-gray-900 rounded-full flex-row items-center justify-center absolute -top-1 left-[23px] z-50`}
+                    >
+                      <ThemedText style={tw`text-[10px] text-white`}>
+                        {totalWishlistItems}
+                      </ThemedText>
+                    </View>
+                  )}
+                  <Entypo name="heart-outlined" size={24} color="#030712" />
+                </View>
+              );
 
               return focused ? (
                 <View style={tw`relative`}>
@@ -72,19 +104,11 @@ const TabsLayout = () => {
               ) : (
                 <Ionicons name="grid-outline" size={24} color="#030712" />
               );
-            case "orders":
+            case "products":
               return focused ? (
-                <MaterialCommunityIcons
-                  name="clipboard-check"
-                  size={24}
-                  color="black"
-                />
+                <Entypo name="shopping-cart" size={24} color="black" />
               ) : (
-                <MaterialCommunityIcons
-                  name="clipboard-check-outline"
-                  size={24}
-                  color="black"
-                />
+                <Ionicons name="cart-outline" size={24} color="black" />
               );
             case "profile":
               return focused ? (
@@ -103,13 +127,55 @@ const TabsLayout = () => {
         },
         tabBarLabelStyle: {
           color: "black",
-          fontFamily: "helveticaNeueMedium",
+          // fontFamily: " ",
         },
         tabBarActiveTintColor: "#030712",
         headerShown: false,
       })}
     >
       <Tabs.Screen name="index" options={{ title: "Home" }} />
+      <Tabs.Screen
+        name="products"
+        options={{
+          title: "Products",
+          headerShown: true,
+          // headerTitleAlign: "center",
+          headerLeftContainerStyle: { paddingLeft: 10 },
+          headerLeft: () => (
+            <Feather
+              onPress={() => {
+                if (router.canGoBack()) {
+                  router.back();
+                }
+              }}
+              name="arrow-left"
+              size={scale(20)}
+              color="black"
+            />
+          ),
+        }}
+      />
+      <Tabs.Screen name="cart" options={{ title: "Cart" }} />
+      <Tabs.Screen
+        name="favorites"
+        options={{
+          title: "Favorites",
+          headerShown: true,
+          headerLeftContainerStyle: { paddingLeft: 8 },
+          headerLeft: () => (
+            <Feather
+              onPress={() => {
+                if (router.canGoBack()) {
+                  router.back();
+                }
+              }}
+              name="arrow-left"
+              size={scale(20)}
+              color="black"
+            />
+          ),
+        }}
+      />
       <Tabs.Screen name="profile" options={{ title: "Profile" }} />
       <Tabs.Screen
         name="delivery-details"

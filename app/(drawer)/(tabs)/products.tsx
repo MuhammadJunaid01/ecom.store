@@ -4,34 +4,35 @@ import {
   FlatList,
   ListRenderItem,
   TouchableOpacity,
-  StatusBar,
 } from "react-native";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { useGetAllCategoriesQuery } from "@/redux/apis/categoriesApiSlice";
+import { Categories, OrderCard } from "@/components";
+import { ScrollableTabs, ThemedText, ThemedView } from "@/components/shared";
 import { tw } from "@/constants/theme";
 import { IProduct, Tab } from "@/lib/interfaces";
-import { ScrollableTabs, ThemedText } from "../shared";
-import { useLazyGetAllProductsQuery } from "@/redux/apis/productsApiSlice";
-import OrderCard from "../shared/OrderCard";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
-
+import { useLazyGetAllProductsQuery } from "@/redux/apis/productsApiSlice";
+import Product from "@/components/shared/Product";
 const PAGE_LIMIT = 30;
 const item_height = 100;
-const MyOrders = () => {
-  const tabs: Tab[] = useMemo(() => {
-    return [
-      { label: "All", query: "" },
-      { label: "Delivered", query: "status=delivered" },
-      { label: "Processing", query: "status=processing" },
-      { label: "Cancelled", query: "status=cancelled" },
-    ];
-  }, []);
-
-  const [selectedTab, setSelectedTab] = useState<Tab>(tabs[0]);
+const ProductsScreen = () => {
   const [getProducts, { data, isFetching, isLoading }] =
     useLazyGetAllProductsQuery();
-  const [refreshing, setRefreshing] = useState(false);
-
+  const { data: categoriesData } = useGetAllCategoriesQuery("");
+  const categories = useMemo(() => {
+    if (!categoriesData) {
+      return [];
+    }
+    return categoriesData.map((category) => {
+      return {
+        label: category.name,
+        query: category.url,
+      };
+    });
+  }, [data]);
+  const [selectedTab, setSelectedTab] = useState<Tab>(categories[0]);
   const [products, setProducts] = useState<IProduct[]>([]);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
@@ -127,48 +128,43 @@ const MyOrders = () => {
   const renderItem: ListRenderItem<IProduct> = useCallback(
     ({ item, index }) => {
       return (
-        <TouchableOpacity
-          onPress={() =>
-            router.push({
-              pathname: "/(orders)/[orderId]" as any,
-              params: { orderId: item?.id },
-            })
-          }
+        <View
+          style={tw` flex-1 w-full`}
+          //   onPress={() =>
+          //     router.push({
+          //       pathname: "/(orders)/[orderId]" as any,
+          //       params: { orderId: item?.id },
+          //     })
+          //   }
         >
-          <OrderCard
-            item_height={item_height}
-            orderNumber={item?.id.toString()}
-            date={new Date().toLocaleDateString()}
-            trackingNumber={item?.stock.toString()}
-            quantity={item?.stock}
-            totalAmount={(item?.price || 0 * item?.stock || 0).toFixed(0)}
-            status={index % 2 === 0 ? "Delivered" : "Pending"}
-          />
-        </TouchableOpacity>
+          <Product width={94} product={item} />
+        </View>
       );
     },
     []
   );
 
   return (
-    <View style={tw`flex-1 gap-y-2.4 bg-transparent px-3`}>
-      <StatusBar barStyle={"dark-content"} />
-
-      <ScrollableTabs
-        tabs={tabs}
-        onTabChange={(tab: Tab) => {
-          setSelectedTab(tab);
-          onRefresh(); // Reset on tab change
-        }}
-        selectedTab={selectedTab}
-      />
+    <ThemedView style={tw` flex-1 h-full w-full bg-white`}>
+      <View style={tw` px-3 mb-2`}>
+        <ScrollableTabs
+          tabs={categories}
+          onTabChange={(tab: Tab) => {
+            setSelectedTab(tab);
+            onRefresh(); // Reset on tab change
+          }}
+          selectedTab={selectedTab}
+        />
+      </View>
       <FlatList
-        contentContainerStyle={tw` pb-11`}
+        key={"two-column"}
+        numColumns={2}
+        contentContainerStyle={tw` pb-11 mt-3 px-4`}
         data={products}
         keyExtractor={(_, i) => i.toString()}
         renderItem={renderItem}
         onRefresh={onRefresh}
-        refreshing={refreshing || isLoading}
+        refreshing={isLoading}
         onEndReached={() => {
           if (!loading && hasMore) setPage((prev) => prev + 1); // Increment page if more products are available
         }}
@@ -176,6 +172,7 @@ const MyOrders = () => {
         initialNumToRender={10}
         maxToRenderPerBatch={10}
         windowSize={21}
+        columnWrapperStyle={tw` justify-between`}
         ListFooterComponent={ListFooter}
         ListEmptyComponent={ListEmpty}
         getItemLayout={(_data, index) => ({
@@ -183,10 +180,10 @@ const MyOrders = () => {
           offset: item_height * index,
           index,
         })}
-        ItemSeparatorComponent={() => <View style={tw` h-2`} />}
+        ItemSeparatorComponent={() => <View style={tw` h-3 `} />}
       />
-    </View>
+    </ThemedView>
   );
 };
 
-export default MyOrders;
+export default ProductsScreen;

@@ -157,8 +157,9 @@ const Profile: React.FC<IProps> = ({ user }) => {
                 <UploadPictureModalBody
                   onPressUploadImageFromGallery={(img) => {
                     setUserInfo((prev) => ({ ...prev, displayImage: img }));
-                    bottomSheetModalRef.current?.dismiss();
+                    // bottomSheetModalRef.current?.dismiss();
                     setIsTakePicture(false);
+                    setIsUploadImage(false);
                   }}
                   onPress={() => {
                     setIsTakePicture(true);
@@ -169,6 +170,7 @@ const Profile: React.FC<IProps> = ({ user }) => {
                 />
               ) : (
                 <UpdateUser
+                  ref={bottomSheetModalRef}
                   user={userInfo}
                   onPress={() => {
                     setIsUploadImage(true);

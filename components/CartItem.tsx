@@ -28,11 +28,14 @@ const CartItem: React.FC<ProductCardProps> = ({
       <View style={tw`flex-1 px-4`}>
         <ThemedText
           fontFamily="OpenSansBold"
-          style={tw`text-[${scale(15)}px]  text-gray-900/70`}
+          style={tw`text-[${scale(11)}px]  text-gray-900/70`}
         >
           {title}
         </ThemedText>
-        <ThemedText fontFamily="OpenSansRegular" style={tw`text-gray-500`}>
+        <ThemedText
+          fontFamily="OpenSansRegular"
+          style={tw`text-gray-500 text-[${scale(9)}px]`}
+        >
           Unit Price:{formatCurrency(price)}
         </ThemedText>
 

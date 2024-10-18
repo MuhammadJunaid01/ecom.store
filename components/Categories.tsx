@@ -10,6 +10,7 @@ import { ICategory } from "@/lib/interfaces";
 import { BottomModal, ThemedText, ThemedView } from "./shared";
 import { moderateScale, tw } from "@/constants/theme";
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
+import { router } from "expo-router";
 
 interface IProps {
   categories: ICategory[];
@@ -63,7 +64,7 @@ const Categories = React.forwardRef<FlatList, IProps>(
           <ThemedText>Categories</ThemedText>
           <TouchableOpacity
             style={tw` h-full w-auto items-center justify-center`}
-            onPress={() => modalRef.current?.present()}
+            onPress={() => router.push("/(categories)/categories" as any)}
           >
             <ThemedText>See all</ThemedText>
           </TouchableOpacity>

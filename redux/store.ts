@@ -4,6 +4,7 @@ import cartSlice from "./features/cartSlice";
 import { apiSlice } from "./apis/apiSlice";
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import userSlice from "./features/userSlice";
+import searchSlice from "./features/searchSlice";
 
 const persistConfig = {
   key: "root",
@@ -17,12 +18,14 @@ const persistedReducer = persistReducer(persistConfig, cartSlice);
 const rootReducer = combineReducers({
   cart: persistedReducer,
   user: userSlice,
+  search: searchSlice,
   [apiSlice.reducerPath]: apiSlice.reducer,
 });
 
 // Configure the store with the persisted reducer
 const store = configureStore({
   reducer: rootReducer,
+
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       immutableCheck: false,

@@ -1,5 +1,5 @@
 import { View, FlatList, ListRenderItem, TouchableOpacity } from "react-native";
-import React, { memo, useCallback } from "react";
+import React, { memo, MutableRefObject, useCallback } from "react";
 import { tw } from "@/constants/theme";
 import { scale } from "react-native-size-matters";
 import ThemedText from "./ThemedText";
@@ -22,11 +22,13 @@ const ScrollableTabs = React.forwardRef<FlatList, IProps>(
             onPress={() => onTabChange(tab)}
             style={tw`   items-center justify-center h-[90%]  my-auto ${
               selectedTab.label === tab.label
-                ? "  bg-black"
-                : " shadow bg-white "
-            }  rounded-full py-[${scale(4)}px] px-[${scale(15)}px] ${
-              index !== tabs.length - 1 ? `mr-[${scale(6)}px]` : ""
-            }`}
+                ? " bg-black"
+                : " shadow bg-white  "
+            }  rounded-full py-[${scale(4)}px] ${
+              tab.label === "All"
+                ? `px-[${scale(28)}px]`
+                : `px-[${scale(15)}px]`
+            }   ${index !== tabs.length - 1 ? `mr-[${scale(6)}px]` : ""}`}
             disabled={isFetching}
           >
             <ThemedText
@@ -51,11 +53,20 @@ const ScrollableTabs = React.forwardRef<FlatList, IProps>(
           renderItem={renderItem}
           keyExtractor={(_, index) => `KEY+${index}`}
           showsHorizontalScrollIndicator={false}
-          getItemLayout={(data, index) => ({
-            length: 60,
-            offset: 60 * index,
-            index,
-          })}
+          // getItemLayout={(data, index) => ({
+          //   length: 60,
+          //   offset: 60 * index,
+          //   index,
+          // })}
+          onScrollToIndexFailed={(info) => {
+            const wait = new Promise((resolve) => setTimeout(resolve, 500)); // Adjust the delay as necessary
+            wait.then(() => {
+              (ref as MutableRefObject<FlatList>)?.current?.scrollToIndex({
+                index: info.index,
+                animated: true,
+              });
+            });
+          }}
         />
       </View>
     );

@@ -10,6 +10,9 @@ import {
 import ThemedView from "./ThemedView";
 import PagerView from "react-native-pager-view";
 import ThemedText from "./ThemedText";
+import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "expo-router";
+import { DrawerActions } from "@react-navigation/native";
 
 interface ISliderProps {
   sliders: ISlider[];
@@ -24,7 +27,7 @@ const Slider: React.FC<ISliderProps> = ({ sliders }) => {
   const pagerRef = useRef<PagerView>(null);
   const [currentPage, setCurrentPage] = useState(0);
   const sliderHeight = screen.height * 0.24; // Define height based on screen
-
+  const navigation = useNavigation();
   const onPageSelected = (event: any) => {
     // console.log(`Page selected: ${event.nativeEvent.position}`); // Debug log
     setCurrentPage(event.nativeEvent.position);
@@ -47,29 +50,10 @@ const Slider: React.FC<ISliderProps> = ({ sliders }) => {
     // Clear interval on component unmount
     return () => clearInterval(interval);
   }, [sliders.length]);
-  // const generateColor = (index: number) => {
-  //   switch (index) {
-  //     case 0:
-  //       return {
-  //         bg: `bg-green-400`,
-  //         text: "text-white",
-  //       };
-  //     case 1:
-  //       return { bg: `bg-gray-900`, text: "text-white" };
-  //     case 2:
-  //       return { bg: `bg-gray-900`, text: "text-white" };
-  //     case 3:
-  //       return { bg: `bg-indigo-400`, text: "text-black" };
-  //     case 4:
-  //       return { bg: `bg-emerald-400`, text: "text-white" };
 
-  //     default:
-  //       return { bg: `bg-gray-900`, text: "text-white" };
-  //   }
-  // };
   return (
     <View
-      style={tw`mt-0 h-[${moderateScale(168)}px] w-full   bg-gray-900  px-4`}
+      style={tw`mt-0 h-[${moderateScale(240)}px] w-full   bg-gray-900  px-4`}
     >
       <PagerView
         ref={pagerRef}
@@ -80,7 +64,7 @@ const Slider: React.FC<ISliderProps> = ({ sliders }) => {
         {sliders.map((slide, i) => (
           <ThemedView
             key={i}
-            style={tw`flex-1 flex-row w-full h-full  items-center justify-center    `}
+            style={tw`flex-1  bg-transparent flex-row w-full h-full  items-center justify-center    `}
           >
             <View style={tw` w-[40%]`}>
               <ThemedText
@@ -151,6 +135,24 @@ const Slider: React.FC<ISliderProps> = ({ sliders }) => {
           </TouchableOpacity>
         ))}
       </View>
+      <TouchableOpacity
+        onPress={() => {
+          navigation.dispatch(DrawerActions.openDrawer());
+        }}
+        style={tw` absolute  flex-row gap-x-2  top-[${scale(
+          24
+        )}px] z-50 w-full  px-3 h-11`}
+      >
+        <Ionicons name="menu-outline" size={scale(24)} color="white" />
+        <ThemedText
+          accessibilityHint="App Name"
+          accessibilityLabel="Ecom Store"
+          style={tw` text-[${moderateScale(16)}px] text-white`}
+          fontFamily="OpenSansSemiBold"
+        >
+          Ecom Store
+        </ThemedText>
+      </TouchableOpacity>
     </View>
   );
 };

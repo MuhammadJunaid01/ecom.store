@@ -7,6 +7,7 @@ import {
   ListRenderItem,
   TouchableOpacity,
   RefreshControl,
+  StatusBar,
 } from "react-native";
 import React, {
   useCallback,
@@ -42,10 +43,7 @@ const TabsHome = () => {
   const bottomModalRef = useRef<BottomSheetModal>(null);
   const ref = useRef<TextInput>(null);
   const onPressSlider = () => bottomModalRef.current?.present();
-  const onPressClearInput = () => {
-    setText("");
-    if (ref.current) ref.current.clear();
-  };
+
   const sliders = useMemo(() => {
     return [
       {
@@ -119,7 +117,6 @@ const TabsHome = () => {
     //   : "";
     // console.log("category", category);
     const initialQuery = `limit=${PAGE_LIMIT}&skip=${skip}`;
-    console.log("initialQuery", initialQuery);
 
     try {
       const response = await getProducts(initialQuery).unwrap();
@@ -189,6 +186,8 @@ const TabsHome = () => {
   }, []);
   return (
     <ThemedView style={tw` bg-white flex-1  `}>
+      <StatusBar barStyle={"light-content"} />
+
       <ScrollView
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
@@ -196,17 +195,6 @@ const TabsHome = () => {
         onScroll={handleScroll}
         scrollEventThrottle={16}
       >
-        {/* <View style={tw` px-3 mb-2`}>
-          <ThemedTextInput
-            value={text}
-            onPressClearInput={onPressClearInput}
-            onChangeText={setText}
-            autoCapitalize="none"
-            placeholder="Search"
-            ref={ref}
-            onPressSlider={onPressSlider}
-          />
-        </View> */}
         <Slider sliders={sliders} />
         <View style={tw` px-3`}>
           <Categories
