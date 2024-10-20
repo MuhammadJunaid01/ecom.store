@@ -1,3 +1,5 @@
+import { IEcomAddress } from "../interfaces";
+
 export const convertCamelCase = (str: string): string => {
   const trimmedStr = str.trim();
   return trimmedStr.charAt(0).toUpperCase() + trimmedStr.slice(1).toLowerCase();
@@ -34,4 +36,16 @@ export const formatCurrency = (value: number, currencyCode = "USD"): string => {
   } catch (error) {
     return "invalid input";
   }
+};
+export const generateFullAddress = (
+  address: IEcomAddress | null | undefined
+): string => {
+  if (!address) {
+    return "Address is not available"; // Fallback message if address is null or undefined
+  }
+
+  const { street, city, country, postalCode } = address;
+
+  // Format the full address based on available fields
+  return `${street}, ${city}, ${country}${postalCode ? `, ${postalCode}` : ""}`;
 };

@@ -1,57 +1,56 @@
 import {
   View,
-  Text,
   FlatList,
   TouchableOpacity,
   ListRenderItem,
-  Pressable,
   TextInput,
-  Image,
 } from "react-native";
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect, useMemo, useRef } from "react";
 import { ThemedText, ThemedView } from "@/components/shared";
 import {
   moderateScale,
   moderateVerticalScale,
   scale,
-  screen,
   tw,
-  verticalScale,
 } from "@/constants/theme";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import showToast from "@/lib/utils/showToast";
 import {
-  clearCart,
   decreaseQuantity,
   increaseQuantity,
   removeFromCart,
 } from "@/redux/features/cartSlice";
-import {
-  Ionicons,
-  FontAwesome6,
-  Feather,
-  MaterialIcons,
-  AntDesign,
-} from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
-import { ICartItem } from "@/lib/interfaces";
-import { convertCamelCase } from "@/lib/utils/utility";
+import { ICartItem, IUser } from "@/lib/interfaces";
 import { CartItem } from "@/components";
+import BottomSheet from "@gorhom/bottom-sheet";
+import { formatCurrency } from "@/lib/utils/utility";
+import CartInfo from "@/components/shared/CartInfo";
 
 const CartScreen = () => {
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.user);
-  const { items } = useAppSelector((state) => state.cart);
+  const { items, totalPrice } = useAppSelector((state) => state.cart);
   const renderItem: ListRenderItem<ICartItem> = useCallback(({ item }) => {
     return (
       <CartItem
         {...item}
         onDecrease={(id) => dispatch(decreaseQuantity({ id }))}
         onIncrease={(id) => dispatch(increaseQuantity({ id }))}
+        onRemove={(id) => dispatch(removeFromCart(id))}
       />
     );
   }, []);
-  console.log("screen.height * 0.7", screen.height * 0.7);
+  const bottomSheetRef = useRef<BottomSheet>(null);
+  // Set the snap points for the BottomSheet
+  const snapPoints = useMemo(() => ["33%"], []);
+
+  useEffect(() => {
+    // Programmatically open the bottom sheet on mount
+    if (bottomSheetRef.current) {
+      bottomSheetRef.current.expand(); // Automatically expand on mount
+    }
+  }, []);
   return (
     <ThemedView
       accessible
@@ -60,7 +59,9 @@ const CartScreen = () => {
     >
       <View style={tw`flex-1 w-full `}>
         <FlatList
-          contentContainerStyle={tw` px-4`}
+          contentContainerStyle={tw` px-4   pb-[${moderateVerticalScale(
+            70
+          )}px]`}
           keyExtractor={(_, i) => `KEY ${i}`}
           data={items}
           ListEmptyComponent={() => {
@@ -112,58 +113,31 @@ const CartScreen = () => {
         />
       </View>
       {items?.length > 0 && (
-        <View style={tw`  w-full px-3 pb-2 flex-row items-center gap-x-3`}>
-          <TouchableOpacity
-            accessibilityHint="Tap for clear Cart"
-            accessibilityLabel="Clear Cart"
-            accessibilityRole="button"
-            onPress={() => {
-              dispatch(clearCart());
-            }}
-            style={tw`flex-1 bg-transparent rounded-md border border-red-400 py-[9px] flex-row items-center justify-center gap-x-2`}
-          >
-            <ThemedText
-              fontFamily="OpenSansMedium"
-              style={tw` text-[${moderateVerticalScale(
-                14
-              )}px] text-red-500 font-normal`}
-            >
-              {convertCamelCase("Clear Cart")}
-            </ThemedText>
-            <FontAwesome6 name="arrow-right" size={20} color="white" />
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => {
-              if (!user) {
-                router.push({
-                  pathname: "/(auth)/sign-in",
-                  params: { redirectTo: "delivery-details" },
-                });
-              } else {
-                router.push("/(drawer)/(tabs)/delivery-details" as any);
-              }
-            }}
-            accessibilityRole="button"
-            accessibilityHint="Tap for navigate proceed to buy screen"
-            accessibilityLabel={convertCamelCase("PROCEED TO BUY")}
-            style={tw`flex-1 bg-gray-900 rounded-md py-2.5 flex-row items-center justify-center gap-x-2`}
-          >
-            <ThemedText
-              fontFamily="OpenSansMedium"
-              style={tw` text-[${moderateVerticalScale(
-                14
-              )}px]  text-white font-normal`}
-            >
-              {convertCamelCase("PROCEED TO BUY")}
-            </ThemedText>
-            <AntDesign
-              name="right"
-              size={scale(18)}
-              style={tw` mt-0.5`}
-              color="white"
+        <BottomSheet
+          ref={bottomSheetRef}
+          snapPoints={snapPoints}
+          enablePanDownToClose={false}
+          enableHandlePanningGesture={false}
+          enableContentPanningGesture={false}
+          handleIndicatorStyle={tw` hidden `}
+        >
+          <View style={tw` flex-1  shadow-md mt-1 bg-white`}>
+            <CartInfo
+              onPress={() => {
+                if (!user) {
+                  router.push({
+                    pathname: "/(auth)/sign-in",
+                    params: { redirectTo: "delivery-details" },
+                  });
+                } else {
+                  router.push("/(drawer)/(tabs)/delivery-details" as any);
+                }
+              }}
+              btnTitle="Proceed to check out"
+              totalPrice={totalPrice}
             />
-          </TouchableOpacity>
-        </View>
+          </View>
+        </BottomSheet>
       )}
     </ThemedView>
   );

@@ -25,7 +25,7 @@ const userSlice = createSlice({
         _id: String((state.user?.addresses.length as number) + 1),
       };
       const findIndex = state.user?.addresses.findIndex(
-        (address) => address._id == newAdd._id
+        (address) => address.addressType == newAdd.addressType
       );
       const address = [...(state.user?.addresses as IEcomAddress[])];
       if (findIndex != -1 && findIndex !== undefined) {

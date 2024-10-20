@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, Image } from "react-native";
+import { View, Text, TouchableOpacity, Image, Pressable } from "react-native";
 import React, { useCallback, useMemo } from "react";
 import { ThemedText, ThemedView } from ".";
 import { tw } from "@/constants/theme";
@@ -25,7 +25,7 @@ const Product: React.FC<IProps> = ({ product, width = 48, onPress }) => {
   );
 
   return (
-    <TouchableOpacity
+    <Pressable
       onPress={() => onPress?.()}
       accessible
       accessibilityHint="Product"
@@ -116,7 +116,7 @@ const Product: React.FC<IProps> = ({ product, width = 48, onPress }) => {
           />
         )}
       </TouchableOpacity>
-    </TouchableOpacity>
+    </Pressable>
   );
 };
 

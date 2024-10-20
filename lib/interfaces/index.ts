@@ -105,3 +105,11 @@ export type Tab = {
   label: string;
   query: string;
 };
+export interface AddressFormData {
+  state: string;
+  city: string;
+  postalCode: string;
+  street: string;
+  title: string;
+  country: string;
+}

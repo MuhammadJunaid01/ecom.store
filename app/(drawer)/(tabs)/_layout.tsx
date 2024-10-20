@@ -155,13 +155,32 @@ const TabsLayout = () => {
           ),
         }}
       />
-      <Tabs.Screen name="cart" options={{ title: "Cart" }} />
+      <Tabs.Screen
+        name="cart"
+        options={{
+          title: "Cart",
+          headerShown: true,
+          headerLeftContainerStyle: { paddingLeft: 10 },
+          headerLeft: () => (
+            <Feather
+              onPress={() => {
+                if (router.canGoBack()) {
+                  router.back();
+                }
+              }}
+              name="arrow-left"
+              size={scale(20)}
+              color="black"
+            />
+          ),
+        }}
+      />
       <Tabs.Screen
         name="favorites"
         options={{
           title: "Favorites",
           headerShown: true,
-          headerLeftContainerStyle: { paddingLeft: 8 },
+          headerLeftContainerStyle: { paddingLeft: 10 },
           headerLeft: () => (
             <Feather
               onPress={() => {
@@ -180,17 +199,39 @@ const TabsLayout = () => {
       <Tabs.Screen
         name="delivery-details"
         options={{
-          title: "",
+          title: "Shipping Details",
           href: null,
-          headerShown: false,
+          headerShown: true,
+          headerLeftContainerStyle: { paddingLeft: 10 },
+          headerLeft: () => (
+            <Feather
+              onPress={() => {
+                router.push("/(tabs)/cart");
+              }}
+              name="arrow-left"
+              size={scale(20)}
+              color="black"
+            />
+          ),
         }}
       />
       <Tabs.Screen
         name="place-order"
         options={{
-          title: "",
+          title: "Checkout",
           href: null,
-          headerShown: false,
+          headerShown: true,
+          headerLeftContainerStyle: { paddingLeft: 10 },
+          headerLeft: () => (
+            <Feather
+              onPress={() => {
+                router.push("/(tabs)/delivery-details");
+              }}
+              name="arrow-left"
+              size={scale(20)}
+              color="black"
+            />
+          ),
         }}
       />
     </Tabs>
