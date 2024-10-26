@@ -12,7 +12,7 @@ import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 interface IProps {
   product: IProduct;
   width?: number;
-  onPress?: () => void;
+  onPress?: (id: number) => void;
 }
 const Product: React.FC<IProps> = ({ product, width = 48, onPress }) => {
   const dispatch = useAppDispatch();
@@ -26,7 +26,7 @@ const Product: React.FC<IProps> = ({ product, width = 48, onPress }) => {
 
   return (
     <Pressable
-      onPress={() => onPress?.()}
+      onPress={() => onPress?.(product.id)}
       accessible
       accessibilityHint="Product"
       style={tw` w-[${width}%] h-[${verticalScale(170)}px]  relative rounded p-3

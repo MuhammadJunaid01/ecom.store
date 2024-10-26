@@ -62,26 +62,6 @@ const TabsHome = () => {
         title: "Annibale Colombo Bed",
         warranty: "3 week warranty",
       },
-      {
-        img: "https://cdn.dummyjson.com/products/images/furniture/Annibale%20Colombo%20Sofa/thumbnail.png",
-        title: "Annibale Colombo Sofa",
-        warranty: "4 week warranty",
-      },
-      {
-        img: "https://cdn.dummyjson.com/products/images/furniture/Knoll%20Saarinen%20Executive%20Conference%20Chair/thumbnail.png",
-        title: "Knoll Saarinen Executive Conference Chair",
-        warranty: "5 week warranty",
-      },
-      {
-        img: "https://cdn.dummyjson.com/products/images/furniture/Wooden%20Bathroom%20Sink%20With%20Mirror/thumbnail.png",
-        title: "Wooden Bathroom Sink With Mirror",
-        warranty: "6 week warranty",
-      },
-      {
-        img: "https://cdn.dummyjson.com/products/images/groceries/Kiwi/thumbnail.png",
-        title: "Kiwi",
-        warranty: "7 week warranty",
-      },
     ];
   }, []);
   const categories = useMemo(() => {

@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Ecom Store",
-    "slug": "ecom.store",
+    "slug": "ecom-store",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -20,7 +20,11 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.muhammad_junaid.ecom.store"
+      "package": "com.muhammad_junaid.ecom.store",
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO"
+      ]
     },
     "web": {
       "bundler": "metro",
@@ -47,6 +51,20 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "2986951e-2ef0-4f4f-8785-3695bb3e4487"
+      }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/2986951e-2ef0-4f4f-8785-3695bb3e4487"
     }
   }
 }

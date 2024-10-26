@@ -33,6 +33,8 @@ export const fonts = {
   OpenSansSemiCondensedLightItalic: require("../assets/fonts/OpenSans_SemiCondensed-LightItalic.ttf"),
   OpenSansSemiCondensedSemiBoldItalic: require("../assets/fonts/OpenSans_SemiCondensed-SemiBoldItalic.ttf"),
 };
+const blurhash =
+  "|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[";
 type FontNames = keyof typeof fonts;
 export {
   tw,
@@ -44,4 +46,5 @@ export {
   moderateScale,
   moderateVerticalScale,
   verticalScale,
+  blurhash,
 };

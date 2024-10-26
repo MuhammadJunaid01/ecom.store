@@ -140,6 +140,7 @@ const TabsLayout = () => {
           title: "Products",
           headerShown: true,
           // headerTitleAlign: "center",
+
           headerLeftContainerStyle: { paddingLeft: 10 },
           headerLeft: () => (
             <Feather

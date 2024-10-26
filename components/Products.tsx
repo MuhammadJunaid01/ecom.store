@@ -9,6 +9,7 @@ import { useAppDispatch } from "@/redux/hooks";
 import { addToCart, addToWishList } from "@/redux/features/cartSlice";
 import showToast from "@/lib/utils/showToast";
 import Product from "./shared/Product";
+import { router } from "expo-router";
 interface IProps {
   products: IProduct[];
   isFetching: boolean;
@@ -60,7 +61,18 @@ const Products: React.FC<IProps> = ({ products, isFetching, hasMore }) => {
         style={tw` flex-row items-center justify-between gap-2 flex-wrap`}
       >
         {products?.map((product, i) => {
-          return <Product key={i} product={product} />;
+          return (
+            <Product
+              key={i}
+              product={product}
+              onPress={(id) =>
+                router.push({
+                  pathname: "/products/[productDetails]" as any,
+                  params: { productDetails: id },
+                })
+              }
+            />
+          );
         })}
       </ThemedView>
       {ListFooter()}

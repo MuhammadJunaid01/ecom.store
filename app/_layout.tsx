@@ -54,6 +54,10 @@ export default function RootLayout() {
                   options={{ animation: "slide_from_right" }}
                   name="(categories)"
                 />
+                <Stack.Screen
+                  options={{ animation: "fade_from_bottom" }}
+                  name="products/[productDetails]"
+                />
               </Stack>
             </BottomSheetModalProvider>
           </PersistGate>

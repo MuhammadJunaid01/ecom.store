@@ -2,25 +2,33 @@ import { View, Text } from "react-native";
 import React from "react";
 import { tw } from "@/constants/theme";
 import { FontAwesome } from "@expo/vector-icons";
+import { Review } from "@/lib/interfaces";
+interface IProps {
+  reviews: Review[];
+}
+const Ratings: React.FC<IProps> = ({ reviews }) => {
+  if (reviews?.length < 1) {
+    return;
+  }
+  const totalRatings = reviews?.length;
 
-const Ratings = () => {
-  const totalRatings = 23; // Example data
-  const averageRating = 4.3;
+  // Calculate average rating
+  const averageRating = totalRatings
+    ? reviews.reduce((acc, review) => acc + review?.rating, 0) / totalRatings
+    : 0;
 
-  const ratingsData = [
-    { stars: 5, count: 12 },
-    { stars: 4, count: 5 },
-    { stars: 3, count: 4 },
-    { stars: 2, count: 2 },
-    { stars: 1, count: 0 },
-  ];
+  // Count the number of reviews for each rating (1-5 stars)
+  const ratingsData = Array.from({ length: 5 }, (_, i) => {
+    const stars = 5 - i;
+    const count = reviews?.filter((review) => review.rating === stars)?.length;
+    return { stars, count };
+  });
   return (
-    <View style={tw`p-4 bg-white`}>
-      <Text style={tw`text-2xl font-bold mb-2`}>Rating & Reviews</Text>
+    <View style={tw`p-1 bg-white`}>
       <View style={tw`flex-row items-center mb-4`}>
-        <Text style={tw`text-5xl font-bold`}>{averageRating}</Text>
+        <Text style={tw`text-6xl font-bold`}>{averageRating.toFixed(1)}</Text>
         <View style={tw`ml-4`}>
-          <View style={tw`flex-row`}>
+          <View style={tw`flex-row items-center`}>
             {[...Array(5)].map((_, i) => (
               <FontAwesome
                 key={i}
@@ -30,7 +38,7 @@ const Ratings = () => {
               />
             ))}
           </View>
-          <Text style={tw`text-gray-600`}>{totalRatings} ratings</Text>
+          <Text style={tw`text-gray-500 text-lg`}>{totalRatings} ratings</Text>
         </View>
       </View>
 
@@ -56,21 +64,27 @@ interface RatingBarProps {
 }
 
 const RatingBar = ({ stars, count, totalRatings }: RatingBarProps) => {
-  const percentage = (count / totalRatings) * 100;
-
+  const percentage = totalRatings ? (count / totalRatings) * 100 : 0;
   return (
-    <View style={tw`flex-row items-center my-1`}>
-      <View style={tw`flex-row items-center w-12`}>
-        {[...Array(stars)].map((_, i) => (
-          <FontAwesome key={i} name="star" size={14} color="#f5c518" />
+    <View
+      style={tw`flex-row items-center my-1 gap-x-3 justify-between  w-full`}
+    >
+      <View style={tw`flex-row items-center w-auto`}>
+        {Array.from({ length: stars }).map((_, i) => (
+          <FontAwesome key={i} name="star" size={16} color="#f5c518" />
         ))}
       </View>
       <View
-        style={tw`h-2 bg-gray-200 rounded-full overflow-hidden mx-2 flex-1`}
+        style={tw`h-2 bg-gray-900/90 rounded-full overflow-hidden mx-2 flex-1 `}
       >
-        <View style={[tw`h-full bg-red-500`, { width: `${percentage}%` }]} />
+        <View
+          style={[
+            tw`h-full bg-yellow-400 rounded-full`,
+            { width: `${percentage}%` },
+          ]}
+        />
       </View>
-      <Text style={tw`text-gray-600 ml-2`}>{count}</Text>
+      <Text style={tw`text-gray-600 ml-2 text-lg`}>{count}</Text>
     </View>
   );
 };
