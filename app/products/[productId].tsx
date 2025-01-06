@@ -3,8 +3,14 @@ import DropDown from "@/components/shared/DropDown";
 import Ratings from "@/components/shared/Ratings";
 import { blurhash, moderateVerticalScale } from "@/constants/theme";
 import { Review } from "@/lib/interfaces";
+import { formatCurrency } from "@/lib/utils/utility";
 import { useLazyGetProductByProductIdQuery } from "@/redux/apis/productsApiSlice";
-import { Entypo, EvilIcons, MaterialCommunityIcons } from "@expo/vector-icons";
+import {
+  AntDesign,
+  Entypo,
+  EvilIcons,
+  MaterialCommunityIcons,
+} from "@expo/vector-icons";
 import { router, useLocalSearchParams } from "expo-router";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import {
@@ -16,6 +22,7 @@ import {
   StatusBar,
   TouchableOpacity,
   Image,
+  TextInput,
 } from "react-native";
 
 import tw from "twrnc";
@@ -26,11 +33,12 @@ const SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 
 const ScrollViewScreen = () => {
   const [getProduct, { data, isLoading }] = useLazyGetProductByProductIdQuery();
+  const [quantity, setQuantity] = useState("1");
   const [dropDown, setDropDown] = useState({
     description: true,
     review_ratings: false,
   });
-  const { productDetails } = useLocalSearchParams();
+  const { productId } = useLocalSearchParams();
   const scrollY = useRef(new Animated.Value(0)).current;
   const [selectedImageId, setSelectedImageId] = useState(0);
   const animatedHeaderHeight = scrollY.interpolate({
@@ -41,7 +49,7 @@ const ScrollViewScreen = () => {
 
   const animatedHeaderColor = scrollY.interpolate({
     inputRange: [0, SCROLL_DISTANCE],
-    outputRange: ["red", "#e5e7eb"],
+    outputRange: ["white", "#e5e7eb"],
     extrapolate: "clamp",
   });
   const animatedImgStyle = scrollY.interpolate({
@@ -62,11 +70,16 @@ const ScrollViewScreen = () => {
     outputRange: [1, 0],
     extrapolate: "clamp",
   });
+  const translateY = scrollY.interpolate({
+    inputRange: [0, SCROLL_DISTANCE],
+    outputRange: [0, 330],
+    extrapolate: "clamp",
+  });
   useEffect(() => {
-    if (productDetails) {
-      getProduct({ productId: productDetails as string });
+    if (productId) {
+      getProduct({ productId: productId as string });
     }
-  }, [productDetails]);
+  }, [productId]);
   const sleetedImage = useMemo(() => {
     if (!data) {
       return null;
@@ -86,7 +99,7 @@ const ScrollViewScreen = () => {
     <View style={tw`flex-1`}>
       <Animated.View
         style={[
-          tw`absolute left-0 right-0 w-full items-center justify-center`,
+          tw`absolute left-0 right-0  w-full items-center justify-center`,
           {
             height: animatedHeaderHeight,
             backgroundColor: animatedHeaderColor,
@@ -94,7 +107,7 @@ const ScrollViewScreen = () => {
           },
         ]}
       >
-        <View style={tw` flex-1 h-full w-full bg-white`}>
+        <View style={tw` flex-1 h-full w-full `}>
           <Animated.View style={[tw``, { height: animatedImgStyle }]}>
             {sleetedImage && (
               <Image
@@ -224,6 +237,7 @@ const ScrollViewScreen = () => {
           </View>
           <DropDown
             title="Description"
+            expandedViewHeight={moderateVerticalScale(160)}
             isExpanded={dropDown.description}
             onToggle={() => {
               setDropDown((prev) => ({
@@ -269,7 +283,7 @@ const ScrollViewScreen = () => {
           <DropDown
             title="Review & Ratings"
             isExpanded={dropDown.review_ratings}
-            expandedViewHeight={480}
+            expandedViewHeight={moderateVerticalScale(220)}
             onToggle={() => {
               setDropDown((prev) => ({
                 ...prev,
@@ -286,6 +300,39 @@ const ScrollViewScreen = () => {
           />
         </View>
       </ScrollView>
+      {/* Move up down */}
+      <View style={tw` h-28 bg-white`}>
+        <Animated.View
+          style={[
+            tw`  h-full  border-t border-gray-200  rounded-t-3xl p-4 w-full mt-3`,
+            { transform: [{ translateY: translateY }] },
+          ]}
+        >
+          <View style={tw` flex-row items-center justify-between`}>
+            <ThemedText fontFamily="OpenSansBold">
+              {formatCurrency(data?.price || 0)}
+            </ThemedText>
+            <View style={tw` flex-row items-center gap-x-3`}>
+              <TouchableOpacity
+                style={tw` h-11 w-11 items-center rounded-full bg-green-50 justify-center`}
+              >
+                <AntDesign name="minus" size={20} color="black" />
+              </TouchableOpacity>
+              <TextInput
+                value={quantity.toString()}
+                onChangeText={setQuantity}
+                textAlign="center"
+                style={tw` h-8 w-14 text-base   px-1 rounded-md items-center justify-center border border-gray-200`}
+              />
+              <TouchableOpacity
+                style={tw` h-11 w-11 items-center rounded-full  bg-green-50 justify-center`}
+              >
+                <AntDesign name="plus" size={20} color="black" />
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Animated.View>
+      </View>
     </View>
   );
 };

@@ -1,16 +1,10 @@
-import {
-  View,
-  Text,
-  FlatList,
-  ListRenderItem,
-  TouchableOpacity,
-} from "react-native";
-import React, { useCallback, useRef } from "react";
-import { ICategory } from "@/lib/interfaces";
-import { BottomModal, ThemedText, ThemedView } from "./shared";
 import { moderateScale, tw } from "@/constants/theme";
+import { ICategory } from "@/lib/interfaces";
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
 import { router } from "expo-router";
+import React, { useCallback, useRef } from "react";
+import { FlatList, ListRenderItem, TouchableOpacity, View } from "react-native";
+import { BottomModal, ThemedText, ThemedView } from "./shared";
 
 interface IProps {
   categories: ICategory[];
@@ -39,7 +33,7 @@ const Categories = React.forwardRef<FlatList, IProps>(
         >
           <ThemedText
             fontFamily="OpenSansMedium"
-            style={tw` text-[${moderateScale(16)}px] ${
+            style={tw` text-[${moderateScale(12)}px] ${
               selectedCategory === undefined && item.name === "All"
                 ? "text-white"
                 : selectedCategory === item.name
@@ -61,12 +55,12 @@ const Categories = React.forwardRef<FlatList, IProps>(
     return (
       <ThemedView style={tw``}>
         <ThemedView style={tw`flex-row h-12  items-center justify-between`}>
-          <ThemedText>Categories</ThemedText>
+          <ThemedText style={tw` text-[14px]`}>Categories</ThemedText>
           <TouchableOpacity
-            style={tw` h-full w-auto items-center justify-center`}
+            style={tw` h-full   min-w-[48px] w-auto items-center justify-center`}
             onPress={() => router.push("/(categories)/categories" as any)}
           >
-            <ThemedText>See all</ThemedText>
+            <ThemedText style={tw` text-[14px]`}>See all</ThemedText>
           </TouchableOpacity>
         </ThemedView>
 

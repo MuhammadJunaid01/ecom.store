@@ -56,7 +56,7 @@ export default function RootLayout() {
                 />
                 <Stack.Screen
                   options={{ animation: "fade_from_bottom" }}
-                  name="products/[productDetails]"
+                  name="products/[productId]"
                 />
               </Stack>
             </BottomSheetModalProvider>

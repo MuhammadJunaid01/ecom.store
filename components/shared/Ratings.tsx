@@ -25,7 +25,7 @@ const Ratings: React.FC<IProps> = ({ reviews }) => {
   });
   return (
     <View style={tw`p-1 bg-white`}>
-      <View style={tw`flex-row items-center mb-4`}>
+      <View style={tw`flex-row items-center mb-1`}>
         <Text style={tw`text-6xl font-bold`}>{averageRating.toFixed(1)}</Text>
         <View style={tw`ml-4`}>
           <View style={tw`flex-row items-center`}>
@@ -67,7 +67,7 @@ const RatingBar = ({ stars, count, totalRatings }: RatingBarProps) => {
   const percentage = totalRatings ? (count / totalRatings) * 100 : 0;
   return (
     <View
-      style={tw`flex-row items-center my-1 gap-x-3 justify-between  w-full`}
+      style={tw`flex-row items-center my-0 gap-x-3 justify-between  w-full`}
     >
       <View style={tw`flex-row items-center w-auto`}>
         {Array.from({ length: stars }).map((_, i) => (

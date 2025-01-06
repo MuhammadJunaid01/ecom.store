@@ -1,18 +1,19 @@
-import { View, Text, Platform, StatusBar } from "react-native";
-import React, { useMemo } from "react";
-import { router, Tabs } from "expo-router";
+import { ThemedText } from "@/components/shared";
 import { scale, tw } from "@/constants/theme";
+import { useAppSelector } from "@/redux/hooks";
 import {
-  MaterialIcons,
-  MaterialCommunityIcons,
-  Ionicons,
-  FontAwesome5,
+  AntDesign,
   Entypo,
   Feather,
-  AntDesign,
+  FontAwesome5,
+  Ionicons,
+  MaterialCommunityIcons,
+  MaterialIcons,
 } from "@expo/vector-icons";
-import { useAppSelector } from "@/redux/hooks";
-import { ThemedText } from "@/components/shared";
+import { router, Tabs } from "expo-router";
+import React, { useMemo } from "react";
+import { Dimensions, Platform, StatusBar, Text, View } from "react-native";
+import { BottomFabBar } from "rn-wave-bottom-bar";
 
 const TabsLayout = () => {
   const { items, wishlist } = useAppSelector((state) => state.cart);
@@ -24,16 +25,20 @@ const TabsLayout = () => {
   return (
     <Tabs
       screenOptions={({ route }) => ({
+        tabBarActiveTintColor: "green",
+        tabBarInactiveTintColor: "white",
+        tabBarActiveBackgroundColor: "green",
+        tabBarInactiveBackgroundColor: "red",
         tabBarIcon: ({ focused }) => {
           switch (route?.name) {
             case "index":
               return focused ? (
-                <MaterialIcons name="home" size={25} color="#030712" />
+                <MaterialIcons name="home" size={25} color="white" />
               ) : (
                 <MaterialCommunityIcons
                   name="home-outline"
                   size={25}
-                  color="black"
+                  color="white"
                 />
               );
             case "cart":
@@ -48,7 +53,7 @@ const TabsLayout = () => {
                       </ThemedText>
                     </View>
                   )}
-                  <Ionicons name="bag-handle" size={24} color="#030712" />
+                  <Ionicons name="bag-handle" size={24} color="white" />
                 </View>
               ) : (
                 <View style={tw`relative`}>
@@ -61,11 +66,7 @@ const TabsLayout = () => {
                       </ThemedText>
                     </View>
                   )}
-                  <Ionicons
-                    name="bag-handle-outline"
-                    size={24}
-                    color="#030712"
-                  />
+                  <Ionicons name="bag-handle-outline" size={24} color="white" />
                 </View>
               );
             case "favorites":
@@ -80,7 +81,7 @@ const TabsLayout = () => {
                       </ThemedText>
                     </View>
                   )}
-                  <AntDesign name="heart" size={20} color="#030712" />
+                  <AntDesign name="heart" size={20} color="white" />
                 </View>
               ) : (
                 <View style={tw`relative`}>
@@ -93,45 +94,88 @@ const TabsLayout = () => {
                       </ThemedText>
                     </View>
                   )}
-                  <Entypo name="heart-outlined" size={24} color="#030712" />
+                  <Entypo name="heart-outlined" size={24} color="white" />
                 </View>
               );
 
-              return focused ? (
-                <View style={tw`relative`}>
-                  <Ionicons name="grid" size={24} color="#030712" />
-                </View>
-              ) : (
-                <Ionicons name="grid-outline" size={24} color="#030712" />
-              );
             case "products":
               return focused ? (
-                <Entypo name="shopping-cart" size={24} color="black" />
+                <Entypo name="shopping-cart" size={24} color="white" />
               ) : (
-                <Ionicons name="cart-outline" size={24} color="black" />
+                <Ionicons name="cart-outline" size={24} color="white" />
               );
             case "profile":
               return focused ? (
-                <FontAwesome5 name="user-alt" size={24} color="#030712" />
+                <FontAwesome5 name="user-alt" size={24} color="white" />
               ) : (
-                <FontAwesome5 name="user" size={24} color="#030712" />
+                <FontAwesome5 name="user" size={24} color="white" />
               );
+            case "place-order":
+              return null;
             default:
               return null;
           }
         },
         tabBarStyle: {
-          alignItems: "flex-start",
-          height: 50,
+          // alignItems: "flex-start",
+          justifyContent: "space-between",
+
+          height: 60,
+          width: "100%",
           paddingBottom: Platform.OS === "ios" ? 0 : 5,
+          backgroundColor: "white",
+          // marginLeft: Dimensions.get("window").width / 2 - 160,
         },
         tabBarLabelStyle: {
           color: "black",
           // fontFamily: " ",
         },
-        tabBarActiveTintColor: "#030712",
+        // tabBarActiveTintColor: "white",
         headerShown: false,
       })}
+      tabBar={(props) => {
+        const { state, descriptors, navigation } = props;
+
+        // Define routes you want to hide
+        const hiddenRoutes = ["place-order", "delivery-details"];
+
+        // Filter routes to exclude hidden ones
+        const filteredRoutes = state.routes.filter(
+          (route) => !hiddenRoutes.includes(route.name)
+        );
+
+        // Update the state object to use filtered routes
+        const modifiedState = {
+          ...state,
+          routes: filteredRoutes,
+          index: Math.min(state.index, filteredRoutes.length - 1), // Adjust the index if needed
+        };
+
+        return (
+          <BottomFabBar
+            mode="default"
+            isRtl={false}
+            focusedButtonStyle={{
+              shadowColor: "#000",
+              shadowOffset: { width: 0, height: 7 },
+              shadowOpacity: 0.41,
+              shadowRadius: 9.11,
+              elevation: 14,
+            }}
+            bottomBarContainerStyle={{
+              position: "absolute",
+              bottom: 0,
+              left: 0,
+              right: 0,
+              width: "100%",
+            }}
+            state={modifiedState} // Pass modified state
+            descriptors={descriptors} // Pass descriptors as is
+            navigation={navigation} // Pass navigation as is
+            insets={props.insets}
+          />
+        );
+      }}
     >
       <Tabs.Screen name="index" options={{ title: "Home" }} />
       <Tabs.Screen
@@ -197,7 +241,7 @@ const TabsLayout = () => {
         }}
       />
       <Tabs.Screen name="profile" options={{ title: "Profile" }} />
-      <Tabs.Screen
+      {/* <Tabs.Screen
         name="delivery-details"
         options={{
           title: "Shipping Details",
@@ -215,8 +259,8 @@ const TabsLayout = () => {
             />
           ),
         }}
-      />
-      <Tabs.Screen
+      /> */}
+      {/* <Tabs.Screen
         name="place-order"
         options={{
           title: "Checkout",
@@ -234,7 +278,7 @@ const TabsLayout = () => {
             />
           ),
         }}
-      />
+      /> */}
     </Tabs>
   );
 };
