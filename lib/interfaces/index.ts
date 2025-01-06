@@ -113,3 +113,16 @@ export interface AddressFormData {
   title: string;
   country: string;
 }
+export type Reaction = {
+  likes: number;
+  dislikes: number;
+};
+export interface IPost {
+  id: number;
+  title: string;
+  body: string;
+  tags: string[];
+  reactions: Reaction;
+  views: number;
+  userId: number;
+}
