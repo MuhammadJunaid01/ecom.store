@@ -77,16 +77,18 @@ const TabsHome = () => {
           <Products query="limit=10" title="On Sale Today" compName="onSale" />
           <View style={tw` mt-7`}>
             <Products
-              query="limit=30&category=beauty"
+              query="limit=30"
               title="Beauty"
               compName="Category"
+              category="beauty"
             />
           </View>
           <View style={tw` mt-7`}>
             <Products
-              query="limit=30&category=furniture"
+              query="limit=30"
               title="Furniture"
               compName="Category"
+              category="furniture"
             />
           </View>
           <View style={tw` mt-5`}>

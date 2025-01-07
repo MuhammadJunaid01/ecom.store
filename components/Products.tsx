@@ -2,6 +2,7 @@ import { scale, tw, verticalScale } from "@/constants/theme";
 import { IProduct } from "@/lib/interfaces";
 import {
   useGetAllProductsQuery,
+  useLazyGetAllProductsByCategoryQuery,
   useLazyGetAllProductsQuery,
 } from "@/redux/apis/productsApiSlice";
 import { useAppDispatch } from "@/redux/hooks";
@@ -15,14 +16,40 @@ interface IProps {
   query: string;
   title: string;
   compName?: CompName;
+  category?: string;
 }
 
-const Products: React.FC<IProps> = ({ query, title, compName = "onSale" }) => {
+const Products: React.FC<IProps> = ({
+  query,
+  title,
+  compName = "onSale",
+  category = "",
+}) => {
   const [getProducts, { data, isLoading }] = useLazyGetAllProductsQuery();
+  const [
+    getProductsByCategory,
+    { data: productsData, isLoading: isPrLoading },
+  ] = useLazyGetAllProductsByCategoryQuery();
   //   console.log(products);
   useEffect(() => {
-    getProducts(query);
+    if (compName == "onSale") {
+      getProducts(query);
+    }
+    if (compName === "Category" && category) {
+      getProductsByCategory(category);
+    }
   }, [query]);
+  const products = useMemo(() => {
+    switch (compName) {
+      case "onSale":
+        return data?.products;
+      case "Category":
+        return productsData?.products;
+
+      default:
+        data?.products;
+    }
+  }, [data, productsData]);
   const compHeight = useMemo(() => {
     switch (compName) {
       case "onSale":
@@ -89,7 +116,7 @@ const Products: React.FC<IProps> = ({ query, title, compName = "onSale" }) => {
       <ThemedView style={tw`h-[${verticalScale(compHeight)}px]   w-full`}>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           <ThemedView style={tw`  flex-row  gap-x-3 items-center`}>
-            {data?.products?.map((product, i) => {
+            {products?.map((product, i) => {
               return (
                 <Product
                   compName={compName}
