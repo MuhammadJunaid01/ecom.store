@@ -1,36 +1,70 @@
 import { IPost } from "@/lib/interfaces";
 import React from "react";
-import { FlatList, Text, View } from "react-native";
+import {
+  Dimensions,
+  FlatList,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { verticalScale } from "react-native-size-matters";
 import tw from "twrnc";
+import ThemedText from "./ThemedText";
 
 interface IProps {
   post: IPost;
 }
 
 const PostCard: React.FC<IProps> = ({ post }) => {
+  console.log(post.body);
   return (
-    <View style={tw`bg-white rounded-lg shadow-md p-4 mb-4`}>
+    <TouchableOpacity
+      style={tw`bg-white m-2 rounded-lg shadow p-4  overflow-hidden  h-[${verticalScale(
+        90
+      )}px] w-[${Dimensions.get("screen").width * 0.5}px]`}
+    >
       {/* Title */}
-      <Text style={tw`text-lg font-bold text-gray-800 mb-2`}>{post.title}</Text>
+      <ThemedText
+        ellipsizeMode="tail"
+        numberOfLines={1}
+        fontFamily="OpenSansCondensedBold"
+        style={tw` text-gray-600 mb-1`}
+      >
+        {post.title}
+      </ThemedText>
 
       {/* Body */}
-      <Text style={tw`text-sm text-gray-600 mb-4`} numberOfLines={3}>
+      <ThemedText
+        ellipsizeMode="tail"
+        style={tw`text-sm w-full  text-gray-600`}
+        numberOfLines={2}
+      >
         {post.body}
-      </Text>
+      </ThemedText>
 
-      {/* Tags */}
-      <FlatList
-        data={post.tags}
-        keyExtractor={(tag, index) => `${tag}-${index}`}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        renderItem={({ item }) => (
-          <View style={tw`bg-blue-100 px-3 py-1 rounded-full mr-2`}>
-            <Text style={tw`text-xs text-blue-600 font-medium`}>{item}</Text>
-          </View>
-        )}
-      />
-    </View>
+      {/* tags */}
+      <View style={tw` mt-1 flex-row gap-x-1 items-center justify-between`}>
+        <ThemedText
+          fontFamily="OpenSansMedium"
+          style={tw`  text-sm text-gray-400`}
+        >
+          #Tags
+        </ThemedText>
+        <View
+          style={tw` flex-row items-center flex-wrap gap-x-1 justify-between`}
+        >
+          {post.tags.map((tag, i) => {
+            return (
+              <View key={i}>
+                <ThemedText style={tw` text-gray-400 text-sm`}>
+                  {tag}
+                </ThemedText>
+              </View>
+            );
+          })}
+        </View>
+      </View>
+    </TouchableOpacity>
   );
 };
 

@@ -33,10 +33,15 @@ const TabsLayout = () => {
           switch (route?.name) {
             case "index":
               return focused ? (
-                <MaterialIcons name="home" size={25} color="white" />
+                // <MaterialIcons name="home" size={25} color="white" />
+                <MaterialCommunityIcons
+                  name="view-grid"
+                  size={24}
+                  color="white"
+                />
               ) : (
                 <MaterialCommunityIcons
-                  name="home-outline"
+                  name="view-grid-outline"
                   size={25}
                   color="white"
                 />
@@ -112,6 +117,8 @@ const TabsLayout = () => {
               );
             case "place-order":
               return null;
+            case "blogs":
+              return null;
             default:
               return null;
           }
@@ -137,7 +144,7 @@ const TabsLayout = () => {
         const { state, descriptors, navigation } = props;
 
         // Define routes you want to hide
-        const hiddenRoutes = ["place-order", "delivery-details"];
+        const hiddenRoutes = ["place-order", "delivery-details", "blogs"];
 
         // Filter routes to exclude hidden ones
         const filteredRoutes = state.routes.filter(
@@ -203,21 +210,9 @@ const TabsLayout = () => {
       <Tabs.Screen
         name="cart"
         options={{
-          title: "Cart",
-          headerShown: true,
+          title: "",
+          headerShown: false,
           headerLeftContainerStyle: { paddingLeft: 10 },
-          headerLeft: () => (
-            <Feather
-              onPress={() => {
-                if (router.canGoBack()) {
-                  router.back();
-                }
-              }}
-              name="arrow-left"
-              size={scale(20)}
-              color="black"
-            />
-          ),
         }}
       />
       <Tabs.Screen
@@ -241,6 +236,7 @@ const TabsLayout = () => {
         }}
       />
       <Tabs.Screen name="profile" options={{ title: "Profile" }} />
+      {/* <Tabs.Screen name="blogs" options={{ title: "", href: null }} /> */}
       {/* <Tabs.Screen
         name="delivery-details"
         options={{

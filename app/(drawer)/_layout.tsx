@@ -1,18 +1,12 @@
-import { View, Text, Image, TouchableOpacity } from "react-native";
-import React, { useMemo } from "react";
-import { Drawer } from "expo-router/drawer";
-import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
-import { router, useNavigation, useSegments } from "expo-router";
-import { moderateScale, scale, screen, tw } from "@/constants/theme";
-import {
-  EvilIcons,
-  Feather,
-  Ionicons,
-  MaterialIcons,
-} from "@expo/vector-icons"; // Added MaterialIcons for the logout icon
-import { DrawerActions } from "@react-navigation/native";
-import { useAppSelector } from "@/redux/hooks";
 import { ThemedText } from "@/components/shared";
+import { tw } from "@/constants/theme";
+import { useAppSelector } from "@/redux/hooks";
+import { MaterialIcons } from "@expo/vector-icons"; // Added MaterialIcons for the logout icon
+import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
+import { useNavigation, useSegments } from "expo-router";
+import { Drawer } from "expo-router/drawer";
+import React, { useMemo } from "react";
+import { Image, Text, TouchableOpacity, View } from "react-native";
 
 const _layout = () => {
   const segments = useSegments();
@@ -165,7 +159,7 @@ const CustomDrawerContent = (props: any) => {
           const formattedLabel =
             label == "tabs"
               ? "Home"
-              : label.charAt(0).toUpperCase() + label.slice(1);
+              : label?.charAt(0).toUpperCase() + label?.slice(1);
           return (
             <DrawerItem
               key={route.key}

@@ -1,31 +1,31 @@
-import {
-  View,
-  FlatList,
-  TouchableOpacity,
-  ListRenderItem,
-  TextInput,
-} from "react-native";
-import React, { useCallback, useEffect, useMemo, useRef } from "react";
+import { CartItem } from "@/components";
 import { ThemedText, ThemedView } from "@/components/shared";
+import CartInfo from "@/components/shared/CartInfo";
 import {
   moderateScale,
   moderateVerticalScale,
   scale,
   tw,
 } from "@/constants/theme";
-import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { ICartItem, IUser } from "@/lib/interfaces";
+import { formatCurrency } from "@/lib/utils/utility";
 import {
   decreaseQuantity,
   increaseQuantity,
   removeFromCart,
 } from "@/redux/features/cartSlice";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { Ionicons } from "@expo/vector-icons";
-import { router } from "expo-router";
-import { ICartItem, IUser } from "@/lib/interfaces";
-import { CartItem } from "@/components";
 import BottomSheet from "@gorhom/bottom-sheet";
-import { formatCurrency } from "@/lib/utils/utility";
-import CartInfo from "@/components/shared/CartInfo";
+import { router } from "expo-router";
+import React, { useCallback, useEffect, useMemo, useRef } from "react";
+import {
+  FlatList,
+  ListRenderItem,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 const CartScreen = () => {
   const dispatch = useAppDispatch();
@@ -55,9 +55,9 @@ const CartScreen = () => {
     <ThemedView
       accessible
       accessibilityHint="Cart"
-      style={tw` flex-1 h-full w-full bg-white p-3`}
+      style={tw` flex-1 h-full w-full mb-20 bg-white  `}
     >
-      <View style={tw`flex-1 w-full `}>
+      <View style={tw`flex-1 w-full mt-2 `}>
         <FlatList
           contentContainerStyle={tw` px-4   pb-[${moderateVerticalScale(
             70

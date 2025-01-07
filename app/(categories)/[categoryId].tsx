@@ -1,10 +1,12 @@
-import {
-  View,
-  Text,
-  ActivityIndicator,
-  FlatList,
-  TouchableOpacity,
-} from "react-native";
+import CategoryByProducts from "@/components/Categories/CategoryByProducts";
+import { ScrollableTabs, ThemedText, ThemedView } from "@/components/shared";
+import { scale, tw } from "@/constants/theme";
+import { IProduct, Tab } from "@/lib/interfaces";
+import { useGetAllCategoriesQuery } from "@/redux/apis/categoriesApiSlice";
+import { setCategoryName } from "@/redux/features/searchSlice";
+import { useAppDispatch } from "@/redux/hooks";
+import { AntDesign, FontAwesome, Ionicons } from "@expo/vector-icons";
+import { useLocalSearchParams } from "expo-router";
 import React, {
   useCallback,
   useEffect,
@@ -12,15 +14,13 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { useLocalSearchParams } from "expo-router";
-import { ScrollableTabs, ThemedText, ThemedView } from "@/components/shared";
-import { scale, tw } from "@/constants/theme";
-import CategoryByProducts from "@/components/Categories/CategoryByProducts";
-import { IProduct, Tab } from "@/lib/interfaces";
-import { useGetAllCategoriesQuery } from "@/redux/apis/categoriesApiSlice";
-import { AntDesign, FontAwesome, Ionicons } from "@expo/vector-icons";
-import { useAppDispatch } from "@/redux/hooks";
-import { setCategoryName } from "@/redux/features/searchSlice";
+import {
+  ActivityIndicator,
+  FlatList,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 const CategoryByProductsScreen = () => {
   const ref = useRef<FlatList>(null);
@@ -50,11 +50,11 @@ const CategoryByProductsScreen = () => {
     if (categoryId) {
       const selected = data.find(
         (category) =>
-          category.name.toLowerCase().trim() === name.toLowerCase().trim()
+          category?.name?.toLowerCase().trim() === name?.toLowerCase()?.trim()
       );
       const finIndex = data.findIndex(
         (category) =>
-          category.name.toLowerCase().trim() === name.toLowerCase().trim()
+          category?.name?.toLowerCase()?.trim() === name?.toLowerCase()?.trim()
       );
 
       if (finIndex !== -1) {
