@@ -1,4 +1,4 @@
-import { Categories, Products } from "@/components";
+import { Products } from "@/components";
 import Posts from "@/components/Posts";
 import { BottomModal } from "@/components/shared";
 import BlackFridaySale from "@/components/shared/BlackFridaySale";
@@ -6,21 +6,14 @@ import Slider from "@/components/shared/Slider";
 import ThemedText from "@/components/shared/ThemedText";
 import ThemedView from "@/components/shared/ThemedView";
 import { tw } from "@/constants/theme";
-import { ICategory, IProduct } from "@/lib/interfaces";
-import showToast from "@/lib/utils/showToast";
+import { ICategory } from "@/lib/interfaces";
 import { useGetAllCategoriesQuery } from "@/redux/apis/categoriesApiSlice";
 import {
   useGetAllProductsQuery,
   useLazyGetAllProductsQuery,
 } from "@/redux/apis/productsApiSlice";
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import React, { useCallback, useMemo, useRef, useState } from "react";
 import { FlatList, ScrollView, StatusBar, TextInput, View } from "react-native";
 interface IQuery {
   selectedCategory: ICategory | null;
